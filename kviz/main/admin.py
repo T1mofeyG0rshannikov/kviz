@@ -4,9 +4,7 @@ from main.models import Client, Kviz
 
 class KvizAdmin(admin.ModelAdmin):
     [
-        "Минимальная зарплата", "Гражданство", "Место жительства", 
-        "О своих профессиональных навыках", "Ответственный", "Инструмент", "Есть напарник", 
-        "Бригада", "Авто", "Оценка объекта", "СЗ/ИП", "Другие преимущества" "НАКСТ", "Монтаж окожушки",
+        "Другие преимущества" "НАКСТ", "Монтаж окожушки",
         "Монтаж фольг.", "Цилиндров", "Монтаж K-Flex", "Монтаж ППУ скорлупы", "Монтаж пеностекла", 
         "Изготовление окожушки", "Напыление ППУ",	"Другие навыки", "Трубопроводы", "Воздуховоды", 
         "Резервуары", "Оборудование", "Что другое умеет изолировать", "Ручная электродуговая", 
@@ -28,7 +26,11 @@ class KvizAdmin(admin.ModelAdmin):
     list_display = [
         "messanger", "messanger_name", "name", "nickname", "user_id",
         "phone", "unique_key", "created_at_tag", "interes", 
-        "profession", "work_experience", "birth_year"
+        "profession", "work_experience", "birth_year", "min_zp",
+        "citizenship", "residence", "skills", "responsible", "instrument",
+        "partner", "brigada", "car", "rate_work", "have_ip", "permanent_job",
+        "temporary_job", "job_without_registration", "schedulefivetwo",
+        "shift_schedule", "dayly_pay", "piecework_payment", "any_job"
     ]
 
     @admin.display(description="Дата и время")

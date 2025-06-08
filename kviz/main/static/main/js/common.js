@@ -115,11 +115,23 @@ $(".next-modal").click(function (e) {
 	console.log(textField);
 	console.log(textField.val());
 	console.log($currentTab.attr('data-field'))
-	if (textField.val().length > 0){
-		sendAnswer(kviz, $currentTab.attr('data-field'), textField.val())
+	if (textField.val() && textField.val().length > 0){
+		sendAnswer(kviz, [$currentTab.attr('data-field')], [textField.val()])
 	}
 	if (modalIndex >= modalsHistory.length){
 		modalsHistory.push(newModalName)
+	}
+	const type = $currentTab.attr('data-type');
+	let inputs = $currentTab.find("input");
+	console.log(inputs)
+	if (type === "checkbox"){
+		let checkedInputs = [];
+		inputs.each(function(){
+			if (this.checked){
+				checkedInputs.push($(this).attr('data-field'))
+			}
+		});
+		sendAnswer(kviz, checkedInputs, Array(checkedInputs.length).fill(true))
 	}
 	if ($currentTab.find('input[type="radio"], input[type="checkbox"]').length > 0) {
 
@@ -167,7 +179,7 @@ $(".next-modal").click(function (e) {
 			console.log(kviz)
 			console.log($currentTab.attr('data-field'))
 			console.log($(this).attr('data-value'))
-			sendAnswer(kviz, $currentTab.attr('data-field'), $(this).attr('data-value'))
+			sendAnswer(kviz, [$currentTab.attr('data-field')], [$(this).attr('data-value')])
 		}
 
 		if ($(".modal_success").hasClass("active")) {

@@ -4,6 +4,7 @@
     class="modal" 
     {% if data.modal_id %}data-modal="{{ data.modal_id }}"{% endif %}
     {% if data.field %}data-field="{{ data.field }}"{% endif %}
+    {% if data.type %}data-type="{{ data.type }}"{% endif %}
     id="modal{{data.name}}"
 >
     <div class="modal__content">
@@ -20,6 +21,7 @@
                         <input 
                             type="{{ data.type }}"
                             {% if option.value %}data-value="{{ option.value }}"{% endif %}
+                            {% if option.field %}data-field="{{ option.field }}"{% endif %}
                             {% if data.type == "radio" %}data-value="{{ option.text }}"{% endif %}
                             {% if option.modal_id %}data-modal="{{ option.modal_id }}"
                             {% else %}

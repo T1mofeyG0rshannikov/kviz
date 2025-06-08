@@ -7,7 +7,7 @@ class Option:
     text: str
     modal_id: Optional[str] = None
     value: Optional[str] = None
-
+    field: Optional[str] = None
 
 @dataclass
 class Form:

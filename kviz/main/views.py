@@ -25,22 +25,40 @@ class Index(TemplateView):
         return context
 
 
+class IndexVK(TemplateView):
+    template_name = 'main/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        #kviz_id = self.request.GET.get("kviz")
+        #kviz = Kviz.objects.get(id=int(kviz_id))
+
+        #context["kviz"] = kviz
+        context["settings"] = IndexPage.objects.first()
+
+        context["forms"] = FORMS
+
+        return context
+
+
 @method_decorator(csrf_exempt, name="dispatch")
 class AnswerView(View):
     def post(self, request: HttpRequest):
         data = request.POST
-        print(data)
         kviz = request.POST.get("kviz")
         kviz = Kviz.objects.get(id=kviz)
-        value = data.get("value")
-        field = data.get("field")
+        values = [i for i in data.get("value").split(",")]
+        fields = [i for i in data.get("field").split(",")]
 
-        if value == "true":
-            value = True
-        if value == "false":
-            value = False
+        print(values)
+        print(fields)
 
-        setattr(kviz, field, value)
+        for field, value in zip(fields, values):
+            if value == "true":
+                value = True
+            if value == "false":
+                value = False
+            setattr(kviz, field, value)
         kviz.save()
         return HttpResponse(status=201)
     

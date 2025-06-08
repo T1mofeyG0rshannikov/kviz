@@ -4,6 +4,6 @@ function sendAnswer(kviz, field, value){
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `kviz=${kviz}&field=${field}&value=${value}`
+        body: `kviz=${kviz}&field=${field.join(',')}&value=${value.join(',')}`
     })
 }

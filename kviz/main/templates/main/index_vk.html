@@ -14,9 +14,9 @@
 	<meta name="format-detection" content="telephone=no">
 	<link rel="stylesheet" href="{% static 'main/css/fonts.css' %}">
 	<link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
+	<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 </head>
 <body class="theme-dark">
-
 	<div class="scale-wrapper">
 		<div class="layout">
 
@@ -30,6 +30,46 @@
 						</a>
 					</div>
 				</header>
+
+				<button id="getUserInfo">Получить информацию о пользователе</button>
+    <button id="sendData">Отправить данные на сервер</button>
+
+    <script>
+      // VK Bridge
+      vkBridge.send('VKWebAppInit', {})
+        .then(data => console.log('VKWebAppInit success', data))
+        .catch(error => console.log('VKWebAppInit error', error));
+
+      document.getElementById('getUserInfo').addEventListener('click', function() {
+          vkBridge.send('VKWebAppGetUserInfo', {})
+            .then(data => {
+                document.getElementById('userId').textContent = data.id;
+                document.getElementById('firstName').textContent = data.first_name;
+                document.getElementById('lastName').textContent = data.last_name;
+            })
+            .catch(error => console.log('VKWebAppGetUserInfo error', error));
+      });
+
+      document.getElementById('sendData').addEventListener('click', function() {
+          vkBridge.send('VKWebAppGetUserInfo', {})
+            .then(data => {
+              fetch('/data', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(data) // Отправляем данные пользователя
+              }).then(response => response.json())
+                .then(data => {
+                    console.log('Ответ от сервера:', data);
+                    alert('Данные успешно отправлены!');
+                });
+            })
+            .catch(error => console.log('VKWebAppGetUserInfo error', error));
+
+
+      });
+    </script>
 		
 				<section class="billbord">
 					<div class="billbord__image">

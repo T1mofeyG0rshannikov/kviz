@@ -6,8 +6,7 @@ import requests
 BOT_TOKEN = '7572740935:AAEYWglRKGGPOww-L-DwM5ZKYrwHIyUyJN4'
 
 # Ссылка на ваше Telegram-приложение
-TELEGRAM_APP_LINK = 'https://t.me/your_telegram_app'  # Замените!
-APP_URL = "http://127.0.0.1:8000"
+APP_URL = "https://kviz111.pythonanywhere.com"
 bot = telebot.TeleBot(BOT_TOKEN)
 
 @bot.message_handler(commands=['start'])
@@ -32,12 +31,10 @@ def start(message):
 
     # Создаем Inline Keyboard
     keyboard = types.InlineKeyboardMarkup()
-    url_button = types.InlineKeyboardButton(text="Открыть приложение", url=TELEGRAM_APP_LINK + "?kviz={kviz}")
-    keyboard.add(url_button)
 
     web_app_button = telebot.types.InlineKeyboardButton(
         text="Открыть приложение",
-        web_app=telebot.types.WebAppInfo(url=APP_URL)
+        web_app=telebot.types.WebAppInfo(url=APP_URL + f"/?kviz={kviz}")
     )
 
     keyboard.add(web_app_button)

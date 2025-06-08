@@ -49,11 +49,11 @@ FORMS = [
         options=[
             Option(
                 text="Сварщик",
-                modal_id="work_experience"
+                modal_id="welding_types"
             ),
             Option(
                 text="Монтажник ТТ",
-                modal_id="work_experience"
+                modal_id="installer_skills"
             ),
             Option(
                 text="Изолировщик на термоизоляции",
@@ -83,33 +83,65 @@ FORMS = [
         modal_id="work_experience"
     ),
     Form(
+        name="installer_skills",
+        question="Укажите Ваши навыки.",
+        type="checkbox",
+        options=[
+            Option(
+                text="Читаю чертежи и схемы"
+            ),
+            Option(
+                text="Знаю нормы и стандарты"
+            ),
+            Option(
+                text="Провожу гидроиспытания"
+            ),
+            Option(
+                text="Организаторские навыки"
+            ),
+            Option(
+                text="Работа с инструментами"
+            )
+        ],
+        modal_id="qualities"
+    ),
+    Form(
         name="work",
         type="checkbox",
         question="Какая работа Вас интересует?",
+
         options=[
             Option(
-                text="Постоянная"
+                text="Постоянная",
+                field="permanent_job"
             ),
             Option(
                 text="Временная",
+                field="temporary_job"
             ),
             Option(
                 text="Без оформления",
+                field="job_without_registration"
             ),
             Option(
                 text="График 5/2",
+                field="schedulefivetwo"
             ),
             Option(
                 text="Сменный график",
+                field="shift_schedule"
             ),
             Option(
                 text="Ежедневная оплата",
+                field="dayly_pay"
             ),
             Option(
                 text="Сдельная оплата",
+                field="piecework_payment"
             ),
             Option(
                 text="Любая работа",
+                field="any_job"
             ),
         ],
         modal_id="profession"
@@ -240,6 +272,42 @@ FORMS = [
         modal_id="work_experience"
     ),
     Form(
+        name="qualities",
+        type="checkbox",
+        question="Укажите Ваши преимущества",
+        options=[
+            Option(
+                text="Ответственный",
+                field="responsible"
+            ),
+            Option(
+                text="Свой инструмент",
+                field="instrument"
+            ),
+            Option(
+                text="Есть напарник",
+                field="partner"
+            ),
+            Option(
+                text="Есть бригада",
+                field="brigada"
+            ),
+            Option(
+                text="Есть авто",
+                field="car"
+            ),
+            Option(
+                text="Могу оценить объём работ",
+                field="rate_work"
+            ),
+            Option(
+                text="Есть ИП/самозанятость",
+                field="have_ip"
+            )
+        ],
+        modal_id="work_experience"
+    ),
+    Form(
         name="work_experience",
         field="work_experience",
         type="radio",
@@ -270,13 +338,55 @@ FORMS = [
         type="text",
         question="Напишите год вашего рождения",
         another=False,
-        modal_id="birth_year"
+        modal_id="min_zp"
     ),
     Form(
         name="min_zp",
+        field="min_zp",
         type="text",
         question="Укажите минимальную приемлемую для вас зарплату",
         another=False,
-        modal_id="birth_year"
+        modal_id="citizenship"
+    ),
+    Form(
+        name="citizenship",
+        field="citizenship",
+        type="radio",
+        question="Какое у вас гражданство?",
+        options=[
+            Option(
+                text="РФ"
+            ),
+            Option(
+                text="РБ"
+            )
+        ],
+        modal_id="residence"
+    ),
+    Form(
+        name="residence",
+        field="residence",
+        type="radio",
+        question="Укажите ваше место жительства",
+        options=[
+            Option(
+                text="Москва"
+            ),
+            Option(
+                text="Санкт-Петербург"
+            )
+        ],
+        modal_id="skills"
+    ),
+    Form(
+        name="skills",
+        field="skills",
+        type="text",
+        question="Расскажите о своих профессиональных навыках.",
+        another=False,
+        modal_id="-callback"
     )
 ]
+
+#Специалисты каких профессий Вас интересуют?
+#……………….

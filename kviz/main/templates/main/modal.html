@@ -1,0 +1,71 @@
+{% load static %}
+
+<div 
+    class="modal" 
+    {% if data.modal_id %}data-modal="{{ data.modal_id }}"{% endif %}
+    {% if data.field %}data-field="{{ data.field }}"{% endif %}
+    id="modal{{data.name}}"
+>
+    <div class="modal__content">
+        <div class="modal__close"></div>
+        <div class="modal__inner">
+            <div class="progressbar">
+                <div class="progressbar__value"></div>
+            </div>
+            <div class="modal__title">{{ data.question }}</div>
+
+            {% for option in data.options %}
+                <div class="{{ data.type }}">
+                    <label>
+                        <input 
+                            type="{{ data.type }}"
+                            {% if option.value %}data-value="{{ option.value }}"{% endif %}
+                            {% if data.type == "radio" %}data-value="{{ option.text }}"{% endif %}
+                            {% if option.modal_id %}data-modal="{{ option.modal_id }}"
+                            {% else %}
+                            {% if data.modal_id %}data-modal="{{ data.modal_id }}"{% endif %}
+                            {% endif %}
+                        >
+                        <span>{{ option.text }}</span>
+                    </label>
+                </div>
+            {% endfor %}
+
+            {% if data.type == "text" %}
+                <label>
+                    <input type="text" class="text" placeholder="Введите другой вариант" />
+                    <style>
+                        .modal .text{
+                        font-size: 13px;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        border: none;
+                        margin: 0;
+                        padding: 0;
+                        border: none;
+                        font-family: "Roboto";
+                        background: #000;
+                        color: #fff;
+                        }
+                    </style>
+                </label>
+            {% endif %}
+
+            {% if data.another %}
+            <div class="{{ data.type }} {{ data.type }}_another">
+                <label>
+                    <span class="{{ data.type }}__fake"></span>
+                    <span class="{{ data.type }}__click"></span>
+                    <span>Другое <input type="text" placeholder="Введите другой вариант"></span>
+                </label>
+            </div>
+            {% endif %}
+            <div class="modal__buttons">
+                <button class="btn-page btn-page_border prev-modal"><img src="{% static 'main/img/arrow.svg' %}" alt="alt"> Назад</button>
+                <button class="btn-page next-modal">Далее <img src="{% static 'main/img/arrow.svg' %}" alt="alt"></button>
+            </div>
+        </div>
+    </div>
+</div>

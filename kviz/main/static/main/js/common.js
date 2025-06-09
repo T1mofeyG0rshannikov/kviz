@@ -100,10 +100,17 @@ $(".prev-modal").click(function (e) {
 
 	updateProgressBar();
 });
-
+$('.another-input').on('input', function (e) {
+	e.preventDefault();
+	console.log("KMNOKMNO")
+	$(this).parents('.modal').find(".modal__buttons").first().css("display", "block");
+})
 $(".next-modal").click(function (e) {
 	e.preventDefault();
 	modalIndex++;
+
+	var fieldsToUpdate = [];
+	var valuesToUpdate = [];
 
 	var $currentTab = $(this).parents(".modal");
 	const newModalName = `modal${$($currentTab).attr('data-modal')}`;
@@ -116,7 +123,13 @@ $(".next-modal").click(function (e) {
 	console.log(textField.val());
 	console.log($currentTab.attr('data-field'))
 	if (textField.val() && textField.val().length > 0){
-		sendAnswer(kviz, [$currentTab.attr('data-field')], [textField.val()])
+		if (textField.hasClass("another-input")){
+			fieldsToUpdate.push(textField.attr('data-field'));
+		}
+		else{
+			fieldsToUpdate.push($currentTab.attr('data-field'));
+		}
+		valuesToUpdate.push(textField.val())
 	}
 	if (modalIndex >= modalsHistory.length){
 		modalsHistory.push(newModalName)
@@ -125,14 +138,15 @@ $(".next-modal").click(function (e) {
 	let inputs = $currentTab.find("input");
 	console.log(inputs)
 	if (type === "checkbox"){
-		let checkedInputs = [];
 		inputs.each(function(){
 			if (this.checked){
-				checkedInputs.push($(this).attr('data-field'))
+				fieldsToUpdate.push($(this).attr('data-field'))
+				valuesToUpdate.push(true);
 			}
 		});
-		sendAnswer(kviz, checkedInputs, Array(checkedInputs.length).fill(true))
 	}
+	sendAnswer(kviz, fieldsToUpdate, valuesToUpdate)
+
 	if ($currentTab.find('input[type="radio"], input[type="checkbox"]').length > 0) {
 
 		const isChecked = $currentTab.find('input[type="radio"]:checked, input[type="checkbox"]:checked').length > 0;
@@ -159,16 +173,16 @@ $(".next-modal").click(function (e) {
 });
 
 	$('.modal').on('click', '.radio input[type="radio"]', function () {
-		console.log('click')
 		var $currentTab = $(this).parents('.modal');
 		const newModalName = `modal${$(this).attr('data-modal')}`
 
-		console.log($(this).attr('data-modal'));
-		console.log(newModalName)
 		var $nextTab = document.getElementById(newModalName);
 
-		console.log($nextTab)
 		modalIndex++;
+
+		console.log($currentTab.attr('data-field'))
+		console.log($(this).attr('data-value'))
+		sendAnswer(kviz, [$currentTab.attr('data-field')], [$(this).attr('data-value')])
 
 		if ($nextTab) {
 			if (modalsHistory.length === 1){
@@ -176,10 +190,6 @@ $(".next-modal").click(function (e) {
 			}
 			$currentTab.removeClass("active").removeClass("zoom-in").addClass("zoom-out");
 			$($nextTab).addClass("active").addClass("zoom-in").removeClass("zoom-out");
-			console.log(kviz)
-			console.log($currentTab.attr('data-field'))
-			console.log($(this).attr('data-value'))
-			sendAnswer(kviz, [$currentTab.attr('data-field')], [$(this).attr('data-value')])
 		}
 
 		if ($(".modal_success").hasClass("active")) {
@@ -235,6 +245,18 @@ $(".next-modal").click(function (e) {
 		const $form = $(this).closest('form');
 		let isValid = true;
 
+		var data = $form.serializeArray();
+		console.log(data)
+		let fieldsToUpdate = [];
+		let valuesToUpdate = [];
+
+		for (let p of data){
+			fieldsToUpdate.push(p.name);
+			valuesToUpdate.push(p.value);
+		}
+
+		sendAnswer(kviz, fieldsToUpdate, valuesToUpdate)
+
 		$form.find('input[required]').each(function () {
 			if ($(this).val().trim() === '') {
 				isValid = false;
@@ -263,6 +285,18 @@ $(".next-modal").click(function (e) {
 		});
 
 		if (isValid) {
+			const data = $form.serializeArray()
+
+			let fieldsToUpdate = [];
+			let valuesToUpdate = [];
+
+			for (let p of data){
+				fieldsToUpdate.push(p.name);
+				valuesToUpdate.push(p.value);
+			}
+
+			sendAnswer(kviz, fieldsToUpdate, valuesToUpdate)
+
 			e.preventDefault();
 			var $currentTab = $(this).parents('.modal');
 
@@ -333,3 +367,4 @@ window.addEventListener('load', scaleLayout);
 
 var modalsHistory = ["modalfirst"];
 var modalIndex = 0;
+

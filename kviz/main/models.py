@@ -46,3 +46,73 @@ class Kviz(models.Model):
     dayly_pay = models.BooleanField(null=True, verbose_name="Интересует ежедневная оплата")
     piecework_payment = models.BooleanField(null=True, verbose_name="Интересует сдельная оплата")
     any_job = models.BooleanField(null=True, verbose_name="Интересует любая работа")
+    work_another = models.CharField(null=True, max_length=200, verbose_name="Какая работа Вас интересует? (Другое)")
+
+    another_skills = models.CharField(null=True, max_length=200, verbose_name="Другие преимущества")
+    
+    NAKCT = models.BooleanField(null=True, verbose_name="НАКСТ")
+
+    installation_window_frame = models.BooleanField(null=True, verbose_name="Монтаж окожушки")
+    installation_foil_cylinders = models.BooleanField(null=True, verbose_name="Монтаж фольг. цилиндров")
+    installation_kflex = models.BooleanField(null=True, verbose_name="Монтаж K-Flex")
+    installation_PPU_shell = models.BooleanField(null=True, verbose_name="Монтаж ППУ скорлупы")
+    foam_glass_installation = models.BooleanField(null=True, verbose_name="Монтаж пеностекла")
+    manufacture_shell = models.BooleanField(null=True, verbose_name="Изготовление окожушки")
+    spraying_PPU = models.BooleanField(null=True, verbose_name="Напыление ППУ")
+    another_insulator_skills = models.CharField(null=True, max_length=200, verbose_name="Другие навыки")
+
+    pipelines = models.BooleanField(null=True, verbose_name="Трубопроводы")
+    airducts = models.BooleanField(null=True, verbose_name="Воздуховоды")
+    reservoirs = models.BooleanField(null=True, verbose_name="Резервуары")
+    equipment = models.BooleanField(null=True, verbose_name="Оборудование")
+    another_can_installer_skills = models.CharField(null=True, max_length=200, verbose_name="Что другое умеет изолировать")
+
+    manual_electric_arc = models.BooleanField(null=True, verbose_name="Ручная электродуговая")
+    semiautomatic = models.BooleanField(null=True, verbose_name="Полуавтоматическая")
+    argon = models.BooleanField(null=True, verbose_name="Аргоновая")
+    gasfired = models.BooleanField(null=True, verbose_name="Газовая")
+    plasma = models.BooleanField(null=True, verbose_name="Плазменная")
+    welding_gas_environment = models.BooleanField(null=True, verbose_name="Сварка в среде газа")
+    another_welding = models.CharField(null=True, max_length=200, verbose_name="Другие виды сварки")
+
+    can_weld_simple_constructions = models.BooleanField(null=True, verbose_name="Простые конструкции")
+    can_weld_building_frames = models.BooleanField(null=True, verbose_name="Каркасы зданий")
+    can_weld_columns = models.BooleanField(null=True, verbose_name="Балки, колонны")
+    can_weld_pipelines = models.BooleanField(null=True, verbose_name="Трубопроводы")
+    can_weld_energy_boilers = models.BooleanField(null=True, verbose_name="Энергетические котлы")
+    can_weld_equipment = models.BooleanField(null=True, verbose_name="Оборудование")
+    can_weld_another = models.CharField(null=True, max_length=200, verbose_name="Другие конструкции")
+
+    read_drawings_diagrams = models.BooleanField(null=True, verbose_name="Читаю чертежи и схемы")
+    know_norms_standards = models.BooleanField(null=True, verbose_name="Знаю нормы и стандарты")
+    conducting_hydrotests = models.BooleanField(null=True, verbose_name="Провожу гидроиспытания")
+    organizational_skills = models.BooleanField(null=True, verbose_name="Организаторские навыки")
+    working_with_tools = models.BooleanField(null=True, verbose_name="Работа с инструментами")
+    another_installer_skills = models.CharField(null=True, max_length=200, verbose_name="Другие навыки")
+
+    OPF = models.CharField(null=True, max_length=3, verbose_name="ОПФ")
+
+    activity_direction = models.CharField(null=True, max_length=200, verbose_name="Направление деятельности")
+    activity_region = models.CharField(null=True, max_length=200, verbose_name="Регион/Город")
+
+    contract_price = models.CharField(null=True, max_length=200, verbose_name="Цена контрактов")
+    ceh_count = models.CharField(null=True, max_length=200, verbose_name="Численность персонала")
+
+    interest_professions = models.CharField(null=True, max_length=200, verbose_name="Интересуют специалисты")
+    region_professions = models.CharField(null=True, max_length=200, verbose_name="Специалисты в регоне")
+
+    organization_form2 = models.CharField(null=True, max_length=200, verbose_name="Организация Форма 2")
+    email_form2 = models.CharField(null=True, max_length=200, verbose_name="e-mai Форма 2")
+    message_form2 = models.CharField(null=True, max_length=200, verbose_name="Сообщение Форма 2")
+
+    has_work = models.CharField(null=True, max_length=200, verbose_name="Есть основная работа")
+    has_work_another = models.CharField(null=True, max_length=200, verbose_name="Есть основная работа (Другое)")
+
+    call = models.BooleanField(null=True, verbose_name="Звонок")
+    vk = models.BooleanField(null=True, verbose_name="Вконтакте")
+    tg = models.BooleanField(null=True, verbose_name="Телеграм")
+    whatsapp = models.BooleanField(null=True, verbose_name="Ватсап")
+
+    class Meta:
+        verbose_name = "Опрос"
+        verbose_name_plural = "Опросы"

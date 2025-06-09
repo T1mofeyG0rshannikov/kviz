@@ -13,18 +13,12 @@ bot = telebot.TeleBot(BOT_TOKEN)
 def start(message):
     """Обработчик команды /start."""
     user_id = message.from_user.id
-    username = message.from_user.username
-    first_name = message.from_user.first_name
+    nickname = message.from_user.username
+    messsanger_name = message.from_user.first_name
     last_name = message.from_user.last_name
 
-    # Формируем сообщение с данными пользователя
-    user_info = f"Привет!\n"
-    user_info += f"ID: {user_id}\n"
-    user_info += f"Username: @{username}\n"  # Добавляем @ перед username
-    user_info += f"Имя: {first_name}\n"
-    user_info += f"Фамилия: {last_name}\n"
-
-    kviz = requests.post(APP_URL + "/kviz", data={"username": username, "messanger": "tg"})
+    kviz = requests.post(APP_URL + "/kviz", data={"nickname": nickname, "messanger": "tg", "messanger_name": messsanger_name})
+    print(kviz.status_code)
     kviz = kviz.json()
     print(kviz)
     kviz = kviz["kviz"]

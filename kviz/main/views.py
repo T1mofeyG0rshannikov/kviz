@@ -47,29 +47,30 @@ class AnswerView(View):
         data = request.POST
         kviz = request.POST.get("kviz")
         kviz = Kviz.objects.get(id=kviz)
-        values = [i for i in data.get("value").split(",")]
-        fields = [i for i in data.get("field").split(",")]
+        values = [i for i in data.get("value").split(";")]
+        fields = [i for i in data.get("field").split(";")]
 
         print(values)
         print(fields)
 
         for field, value in zip(fields, values):
-            if value == "true":
+            if value == "true" or value == "on":
                 value = True
             if value == "false":
                 value = False
             setattr(kviz, field, value)
         kviz.save()
         return HttpResponse(status=201)
-    
+
 
 @method_decorator(csrf_exempt, name="dispatch")
 class CreateKvizView(View):
     def post(self, request: HttpRequest):
         data = request.POST
+        print(data)
         if data["messanger"] == "tg":
 
-            client = Client.objects.filter(messanger_name=data["username"], messanger=data["messanger"]).first()
+            client = Client.objects.filter(nickname=data["nickname"], messanger=data["messanger"]).first()
             if client:
                 old_kviz = Kviz.objects.filter(client=client).last()
 
@@ -77,7 +78,8 @@ class CreateKvizView(View):
             else:
                 client = Client.objects.create(
                     messanger="tg",
-                    messanger_name=data["username"]
+                    messanger_name=data.get("messanger_name"),
+                    nickname=data.get("nickname")
                 )
                     
                 kviz = Kviz.objects.create(client=client, count=1)
@@ -129,7 +131,7 @@ class GetClientsExcel(View):
                    "Трубопроводы", "Котлы", "Оборудование", "Другие конструкции", "Читаю чертежи и схемы", 
                    "Знаю нормы и стандарты", "Провожу гидроиспытания", "Организаторские навыки",
                     "Работа с инструментами", "Другие навыки", "ОПФ", "Направление деятельности", "Регион/Город",
-                    "Цена контрактов", "Численность персонала", "Интересуют специалисты", "Организация Форма 2",
+                    "Цена контрактов", "Численность персонала", "Интересуют специалисты","Специалисты в регионе", "Организация Форма 2",
                   "e-mai Форма 2", "Сообщение Форма 2", "Есть основная работа", "пятидневка",
                     "Есть основная работа, сменный график", "Свободный график",	"Нет работы, только подработки",
                     "Нет основной работы", "У вас есть основная работа? (Другое)",	"Интересует постоянная работа",

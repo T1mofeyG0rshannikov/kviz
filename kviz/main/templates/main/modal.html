@@ -2,7 +2,7 @@
 
 <div 
     class="modal" 
-    {% if data.modal_id %}data-modal="{{ data.modal_id }}"{% endif %}
+    {% if data.next %}data-modal="{{ data.next }}"{% endif %}
     {% if data.field %}data-field="{{ data.field }}"{% endif %}
     {% if data.type %}data-type="{{ data.type }}"{% endif %}
     id="modal{{data.name}}"
@@ -13,7 +13,7 @@
             <div class="progressbar">
                 <div class="progressbar__value"></div>
             </div>
-            <div class="modal__title">{{ data.question }}</div>
+            <div class="modal__title">{{ data.title }}</div>
 
             {% for option in data.options %}
                 <div class="{{ data.type }}">
@@ -23,9 +23,9 @@
                             {% if option.value %}data-value="{{ option.value }}"{% endif %}
                             {% if option.field %}data-field="{{ option.field }}"{% endif %}
                             {% if data.type == "radio" %}data-value="{{ option.text }}"{% endif %}
-                            {% if option.modal_id %}data-modal="{{ option.modal_id }}"
+                            {% if option.next %}data-modal="{{ option.next }}"
                             {% else %}
-                            {% if data.modal_id %}data-modal="{{ data.modal_id }}"{% endif %}
+                            {% if data.next %}data-modal="{{ data.next }}"{% endif %}
                             {% endif %}
                         >
                         <span>{{ option.text }}</span>
@@ -56,15 +56,16 @@
             {% endif %}
 
             {% if data.another %}
-            <div class="{{ data.type }} {{ data.type }}_another">
+            <div class="checkbox checkbox_another">
                 <label>
-                    <span class="{{ data.type }}__fake"></span>
-                    <span class="{{ data.type }}__click"></span>
-                    <span>Другое <input type="text" placeholder="Введите другой вариант"></span>
+                    <span class="checkbox__fake"></span>
+                    <span class="checkbox__click"></span>
+                    <span>Другое <input type="text" class="another-input" data-field="{{ data.another_field }}" placeholder="Введите другой вариант"></span>
                 </label>
             </div>
             {% endif %}
-            <div class="modal__buttons">
+
+            <div class="modal__buttons" {% if data.type == "radio" %}style="display: none;"{% endif %}>
                 <button class="btn-page btn-page_border prev-modal"><img src="{% static 'main/img/arrow.svg' %}" alt="alt"> Назад</button>
                 <button class="btn-page next-modal">Далее <img src="{% static 'main/img/arrow.svg' %}" alt="alt"></button>
             </div>

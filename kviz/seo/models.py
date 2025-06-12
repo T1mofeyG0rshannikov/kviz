@@ -8,6 +8,9 @@ class IndexPage(models.Model):
     running_line = models.CharField(max_length=200, verbose_name="Бегущая строка")
     enable_running_line = models.BooleanField(default=True, verbose_name="Включить бегущую строку")
 
+    tgbot_link = models.CharField(max_length=100, null=True, verbose_name="ссылка на бота в tg")
+    vkbot_link = models.CharField(max_length=100, null=True, verbose_name="ссылка на бота в vk")
+    
     class Meta:
         verbose_name = "Настройки главной страницы"
 

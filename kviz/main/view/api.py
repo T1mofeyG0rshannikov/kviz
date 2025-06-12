@@ -1,36 +1,13 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.views import View
-from main.forms.get_forms import get_forms
 from main.models import Client, Kviz
-from django.views.generic import TemplateView
 
-from seo.models import IndexPage
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import io
 import openpyxl
 from openpyxl.utils import get_column_letter
 from main.models import Client
-
-
-class Index(TemplateView):
-    template_name = 'main/index.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        kviz_id = self.request.GET.get("kviz")
-        kviz = Kviz.objects.get(id=int(kviz_id))
-
-        context["kviz"] = kviz
-        context["settings"] = IndexPage.objects.first()
-
-        context["forms"] = get_forms()
-
-        return context
-
-
-class IndexVK(TemplateView):
-    template_name = 'main/index_vk.html'
 
 
 @method_decorator(csrf_exempt, name="dispatch")
@@ -89,16 +66,6 @@ class GetClientsExcel(View):
         a = [chr(i) for i in range(ord("A"), ord("Z")+1)]
 
         titles_letters = a[:] + [i+j for i in a for j in a]
-
-
-        "Штукатурные работы"
-        "Малярные работы"
-        "Укладка плитки"
-        "Монтаж гипсокартона"
-        "Оклейка обоями"
-        "Установка дверей и окон"
-        "Монтаж потолков"
-        "Комплексная отделка"
 
         titles = [
             "ТГ/ВК", "Имя в ТГ/ВК", "Имя, которое указал пользователь", "Никнейм", "User ID",

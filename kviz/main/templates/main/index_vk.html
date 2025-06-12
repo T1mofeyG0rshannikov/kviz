@@ -19,7 +19,7 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log('Ответ от сервера:', data);
-                    window.location.href = `/?kviz=${data.kviz}`;
+                    window.location.href = `/kviz/?kviz=${data.kviz}`;
                 })
                 .catch(error => console.error("Ошибка отправки данных на сервер:", error));
             })

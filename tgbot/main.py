@@ -28,7 +28,7 @@ def start(message):
 
     web_app_button = telebot.types.InlineKeyboardButton(
         text="Открыть приложение",
-        web_app=telebot.types.WebAppInfo(url=APP_URL + f"/?kviz={kviz}")
+        web_app=telebot.types.WebAppInfo(url=APP_URL + f"/kviz/?kviz={kviz}")
     )
 
     keyboard.add(web_app_button)

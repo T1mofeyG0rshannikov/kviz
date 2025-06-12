@@ -17,7 +17,7 @@ def start(message):
     messsanger_name = message.from_user.first_name
     last_name = message.from_user.last_name
 
-    kviz = requests.post(APP_URL + "/kviz", data={"nickname": nickname, "messanger": "tg", "messanger_name": messsanger_name})
+    kviz = requests.post(APP_URL + "/create-kviz", data={"nickname": nickname, "messanger": "tg", "messanger_name": messsanger_name})
     print(kviz.status_code)
     kviz = kviz.json()
     print(kviz)

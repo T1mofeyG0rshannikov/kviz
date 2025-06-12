@@ -9,7 +9,7 @@
     .then(() => {
         vkBridge.send('VKWebAppGetUserInfo', {})
             .then(data => {
-                fetch('/kviz', {
+                fetch('/create-kviz', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',

@@ -8,6 +8,6 @@ urlpatterns = [
     path('kviz', KvizView.as_view()),
     path('vk', VKView.as_view()),
     path('answer', AnswerView.as_view()),
-    path('kviz', CreateKvizView.as_view()),
+    path('create-kviz', CreateKvizView.as_view()),
     path('file', GetClientsExcel.as_view())
 ]

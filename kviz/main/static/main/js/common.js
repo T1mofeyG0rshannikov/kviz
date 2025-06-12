@@ -46,14 +46,19 @@ $(document).ready(function () {
   });
 
 	//progressbar
+	var progressBarPercent = 0;
 	function updateProgressBar() {
 		var $modals = $('.modal');
 		var $activeModal = $modals.filter('.active');
 		var index = $modals.index($activeModal);
-		var total = $modals.length;
+		$activeModal.closest('form').trigger('reset')
+		const maxsteps = +$activeModal.attr('data-maxsteps')
 
 		if (index !== -1) {
-			var percent = ((index + 1) / total) * 100;
+			console.log(((modalIndex + 1) / (modalIndex + 1 + maxsteps)) * 100)
+			var percent = Math.max(((modalIndex + 1) / (modalIndex + 1 + maxsteps)) * 100, progressBarPercent);
+			progressBarPercent = percent;
+			console.log(progressBarPercent)
 			$activeModal.find('.progressbar__value').css('width', percent + '%');
 		}
 	}
@@ -77,12 +82,12 @@ $(document).ready(function () {
 	//modals
 	$(".open-modal").click(function (e) {
 		e.preventDefault();
-		if ($(".modals-wrap .modal:first-child").hasClass("active")) {
-			$(".modals-wrap .modal:first-child").removeClass("active").removeClass("zoom-in").addClass("zoom-out");
+		if ($("#modalinteres").hasClass("active")) {
+			$("#modalinteres").removeClass("active").removeClass("zoom-in").addClass("zoom-out");
 			$(".modal-overlay").removeClass("active");
 			$("body").removeClass("body_modal");
 		} else {
-			$(".modals-wrap .modal:first-child").addClass("zoom-in").removeClass("zoom-out").addClass("active");
+			$("#modalinteres").addClass("zoom-in").removeClass("zoom-out").addClass("active");
 			$(".modal-overlay").addClass("active");
 			$("body").addClass("body_modal");
 		}
@@ -93,16 +98,18 @@ $(document).ready(function () {
 $(".prev-modal").click(function (e) {
 	e.preventDefault();
 	modalIndex--;
+	console.log(modalIndex)
+	console.log(modalsHistory)
+	console.log(modalsHistory[modalIndex])
 
 	var $currentTab = $(this).parents(".modal");
 	$currentTab.removeClass("active").removeClass("zoom-in").addClass("zoom-out");
-	$(document.querySelectorAll('.modal')[modalIndex]).addClass("active").addClass("zoom-in").removeClass("zoom-out");
+	$(document.getElementById(modalsHistory[modalIndex])).addClass("active").addClass("zoom-in").removeClass("zoom-out");
 
 	updateProgressBar();
 });
 $('.another-input').on('input', function (e) {
 	e.preventDefault();
-	console.log("KMNOKMNO")
 	$(this).parents('.modal').find(".modal__buttons").first().css("display", "block");
 })
 $(".next-modal").click(function (e) {
@@ -115,13 +122,8 @@ $(".next-modal").click(function (e) {
 	var $currentTab = $(this).parents(".modal");
 	const newModalName = `modal${$($currentTab).attr('data-modal')}`;
 	var $nextTab = document.getElementById(newModalName);
-	console.log(newModalName);
-	console.log($nextTab);
 
 	const textField = $currentTab.find('input[type=text]').first();
-	console.log(textField);
-	console.log(textField.val());
-	console.log($currentTab.attr('data-field'))
 	if (textField.val() && textField.val().length > 0){
 		if (textField.hasClass("another-input")){
 			fieldsToUpdate.push(textField.attr('data-field'));
@@ -131,12 +133,16 @@ $(".next-modal").click(function (e) {
 		}
 		valuesToUpdate.push(textField.val())
 	}
+	console.log(modalIndex >= modalsHistory.length);
 	if (modalIndex >= modalsHistory.length){
 		modalsHistory.push(newModalName)
 	}
+	console.log(modalIndex);
+	console.log(modalsHistory);
+
 	const type = $currentTab.attr('data-type');
 	let inputs = $currentTab.find("input");
-	console.log(inputs)
+
 	if (type === "checkbox"){
 		inputs.each(function(){
 			if (this.checked){
@@ -180,17 +186,17 @@ $(".next-modal").click(function (e) {
 
 		modalIndex++;
 
-		console.log($currentTab.attr('data-field'))
-		console.log($(this).attr('data-value'))
 		sendAnswer(kviz, [$currentTab.attr('data-field')], [$(this).attr('data-value')])
 
 		if ($nextTab) {
-			if (modalsHistory.length === 1){
+			if (modalIndex >= modalsHistory.length){
 				modalsHistory.push(newModalName)
 			}
 			$currentTab.removeClass("active").removeClass("zoom-in").addClass("zoom-out");
 			$($nextTab).addClass("active").addClass("zoom-in").removeClass("zoom-out");
 		}
+		console.log(modalIndex)
+		console.log(modalsHistory)
 
 		if ($(".modal_success").hasClass("active")) {
 			setTimeout(() => {
@@ -246,7 +252,6 @@ $(".next-modal").click(function (e) {
 		let isValid = true;
 
 		var data = $form.serializeArray();
-		console.log(data)
 		let fieldsToUpdate = [];
 		let valuesToUpdate = [];
 
@@ -365,6 +370,5 @@ function scaleLayout() {
 window.addEventListener('resize', scaleLayout);
 window.addEventListener('load', scaleLayout);
 
-var modalsHistory = ["modalfirst"];
+var modalsHistory = ["modalinteres"];
 var modalIndex = 0;
-

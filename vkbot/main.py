@@ -1,7 +1,3 @@
-import telebot
-from telebot import types  # Добавляем импорт types
-import requests
-
 # Замените 'YOUR_BOT_TOKEN' на токен вашего бота
 BOT_TOKEN = '7572740935:AAEYWglRKGGPOww-L-DwM5ZKYrwHIyUyJN4'
 
@@ -10,18 +6,18 @@ APP_URL = "https://kviz111.pythonanywhere.com"
 
 import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
-from vk_api.utils import get_random_id
 
 # Замените на свои данные
 VK_TOKEN = 'vk1.a.xJ8_KkEWENR740l1Lm6KFqbS6BQjGOhJabEmXdaEzp6KYCSL2088K_yNYZHa-obehkc0U-aO3NwEYky5IKDPeZSdpUM9wXg767TXTxO-lVC7bS-ICRkm0O6nN-Fbe5-Y4awX2MhkYdaNzaYtKY6mOfhtNKq3GodNvPhVOTMHvc61tm_PyrXHEjPwmsAPh_C4tMRtGDxlDuoT1fgK5e1dsg'  # Токен сообщества VK
 GROUP_ID = 230803417  # ID вашего сообщества VK
-APP_URL = "https://kviz111.pythonanywhere.com"  # URL вашего мини-приложения (HTTPS)
+APP_URL = 'https://vk.com/app52695395'  # URL вашего мини-приложения (HTTPS)
 YOUR_VK_APP_ID = 'https://vk.com/app52695395'
 
 vk_session = vk_api.VkApi(token=VK_TOKEN)
 vk = vk_session.get_api()
 
 longpoll = VkBotLongPoll(vk_session, GROUP_ID)
+
 
 def main():
     print("VK Бот запущен...")
@@ -30,8 +26,8 @@ def main():
         if event.type == VkBotEventType.MESSAGE_NEW:
 
             if event.obj.message['text'].lower() == 'старт':  # Обрабатываем команду "старт"
-
                 user_id = event.obj.message['from_id']  # ID пользователя, отправившего сообщение
+
 
                 # Создаем кнопку для открытия мини-приложения
                 keyboard = {

@@ -1,11 +1,12 @@
 {% load static %}
 
-<div 
+<form
     class="modal" 
     {% if data.next %}data-modal="{{ data.next }}"{% endif %}
     {% if data.field %}data-field="{{ data.field }}"{% endif %}
     {% if data.type %}data-type="{{ data.type }}"{% endif %}
     id="modal{{data.name}}"
+    data-maxsteps="{{ data.max_steps }}"
 >
     <div class="modal__content">
         <div class="modal__close"></div>
@@ -15,27 +16,29 @@
             </div>
             <div class="modal__title">{{ data.title }}</div>
 
-            {% for option in data.options %}
+            <div {% if data.options_count > 10 %}style="column-count: 2"{% endif %}>
+                {% for option in data.options %}
                 <div class="{{ data.type }}">
                     <label>
                         <input 
-                            type="{{ data.type }}"
-                            {% if option.value %}data-value="{{ option.value }}"{% endif %}
-                            {% if option.field %}data-field="{{ option.field }}"{% endif %}
-                            {% if data.type == "radio" %}data-value="{{ option.text }}"{% endif %}
-                            {% if option.next %}data-modal="{{ option.next }}"
-                            {% else %}
-                            {% if data.next %}data-modal="{{ data.next }}"{% endif %}
-                            {% endif %}
+                        type="{{ data.type }}"
+                        {% if option.value %}data-value="{{ option.value }}"{% endif %}
+                        {% if option.field %}data-field="{{ option.field }}"{% endif %}
+                        {% if data.type == "radio" %}data-value="{{ option.text }}"{% endif %}
+                        {% if option.next %}data-modal="{{ option.next }}"
+                        {% else %}
+                        {% if data.next %}data-modal="{{ data.next }}"{% endif %}
+                        {% endif %}
                         >
                         <span>{{ option.text }}</span>
                     </label>
                 </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
 
             {% if data.type == "text" %}
                 <label>
-                    <input type="text" class="text" placeholder="Введите другой вариант" />
+                    <input type="{% if data.name == 'birth_year' %}number{% else %}text{% endif %}" class="text" placeholder="Введите другой вариант" />
                     <style>
                         .modal .text{
                         font-size: 13px;
@@ -55,7 +58,7 @@
                 </label>
             {% endif %}
 
-            {% if data.another %}
+            {% if data.another_field %}
             <div class="checkbox checkbox_another">
                 <label>
                     <span class="checkbox__fake"></span>
@@ -65,10 +68,86 @@
             </div>
             {% endif %}
 
+            {% if data.name == "birth_year" %}
+            <script>
+                const input = document.querySelector('#modalbirth_year').querySelector('input');
+
+                const currentYear = new Date().getFullYear();
+                const maxYear = currentYear - 13;
+                const minYear = currentYear - 75;
+
+                input.min = minYear;
+                input.max = maxYear;
+
+                input.addEventListener('change', () => {
+                    const value = parseInt(input.value, 10);
+                    
+                    if (isNaN(value)) {
+                        input.value = '';
+                    return;
+                    }
+
+                    if (value < minYear) {
+                        input.value = minYear;
+                    } else if (value > maxYear) {
+                        input.value = maxYear;
+                    }
+
+                    if (input.value){
+                        showNextButton()
+                    }
+                    else{
+                        hideNextButton()
+                    }
+                });
+
+                input.addEventListener('input', () => {
+                    const value = parseInt(input.value, 10);
+                    console.log(value)
+                   
+                    if (value > minYear && value < maxYear) {
+                        showNextButton()
+                    } else if (value > maxYear) {
+                        hideNextButton()
+                    }
+                });
+            </script>
+            {% endif %}
+            <script>
+                $('input:checkbox').on('change', function() {
+                    if ($(this).is(':checked')) {
+                        showNextButton()
+                    }
+                    else{
+                        hideNextButton()
+                    }
+                });
+                $('.text:text').on('input', function (e) {
+                    e.preventDefault();
+                    textInput(e.target.value);
+                })
+
+                function showNextButton(){
+                    $('.active').find('.next-modal').css('display', 'flex')
+                }
+                function hideNextButton(){
+                    $('.active').find('.next-modal').css('display', 'none')
+                }
+
+                function textInput(value){
+                    if (value){
+                        showNextButton()
+                    }
+                    else{
+                        hideNextButton()
+                    }
+                }
+            </script>
+
             <div class="modal__buttons" {% if data.type == "radio" %}style="display: none;"{% endif %}>
                 <button class="btn-page btn-page_border prev-modal"><img src="{% static 'main/img/arrow.svg' %}" alt="alt"> Назад</button>
-                <button class="btn-page next-modal">Далее <img src="{% static 'main/img/arrow.svg' %}" alt="alt"></button>
+                <button {% if not data.show_next %}style="display: none;"{% endif %} class="btn-page next-modal">Далее <img src="{% static 'main/img/arrow.svg' %}" alt="alt"></button>
             </div>
         </div>
     </div>
-</div>
+</form>

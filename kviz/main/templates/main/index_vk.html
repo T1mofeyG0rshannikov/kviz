@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+  <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+  <script>
+    vkBridge.send('VKWebAppInit', {})
+    .then(() => {
+        vkBridge.send('VKWebAppGetUserInfo', {})
+            .then(data => {
+                fetch('/kviz', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `nickname=${data.id}&messanger_name=${data.first_name}&messanger=vk`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Ответ от сервера:', data);
+                    window.location.href = `/?kviz=${data.kviz}`;
+                })
+                .catch(error => console.error("Ошибка отправки данных на сервер:", error));
+            })
+            .catch(error => console.error("VKWebAppGetUserInfo error:", error));
+    });
+  </script>
+</body>
+</html>

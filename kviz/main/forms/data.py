@@ -1,11 +1,9 @@
-from main.form import Form, Option
 
-
+'''
 FORMS = [
-    Form(
-        name="first",
+    FormI(
+        name="interes",
         title="Что Вас интересует?",
-        field="interes",
         type="radio",
         options=[
             Option(
@@ -29,16 +27,17 @@ FORMS = [
             ),
             Option(
                 text="Продолжить объем работ",
+                next="object_region"
             ),
             Option(
                 text="Сотрудничество",
+                next="cooperation"
             )
         ],
-        another=False
+        next="profession"
     ),
     Form(
         name="profession",
-        field="profession",
         type="radio",
         title="Какая у Вас профессия?",
         options=[
@@ -56,23 +55,18 @@ FORMS = [
             ),
             Option(
                 text="Разнорабочий",
-                next="work_experience"
             ),
             Option(
                 text="Электрик",
-                next="work_experience"
             ),
             Option(
                 text="Сантехник",
-                next="work_experience"
             ),
             Option(
                 text="Отделочник-универсал",
-                next="work_experience"
             ),
             Option(
                 text="Плиточник",
-                next="work_experience"
             )
         ],
         next="work_experience"
@@ -149,7 +143,6 @@ FORMS = [
     ),
     Form(
         name="has_work",
-        field="has_work",
         type="radio",
         title="У вас есть основная работа?",
         options=[
@@ -333,7 +326,6 @@ FORMS = [
     ),
     Form(
         name="work_experience",
-        field="work_experience",
         type="radio",
         title="Какой у Вас опыт работ по специальности?",
         options=[
@@ -353,28 +345,22 @@ FORMS = [
                 text="Более 10 лет"
             )
         ],
-        another=False,
         next="birth_year"
     ),
     Form(
         name="birth_year",
-        field="birth_year",
         type="text",
         title="Напишите год вашего рождения",
-        another=False,
         next="min_zp"
     ),
     Form(
         name="min_zp",
-        field="min_zp",
         type="text",
         title="Укажите минимальную приемлемую для вас зарплату",
-        another=False,
         next="citizenship"
     ),
     Form(
         name="citizenship",
-        field="citizenship",
         type="radio",
         title="Какое у вас гражданство?",
         options=[
@@ -389,7 +375,6 @@ FORMS = [
     ),
     Form(
         name="residence",
-        field="residence",
         type="radio",
         title="Укажите ваше место жительства",
         options=[
@@ -404,10 +389,8 @@ FORMS = [
     ),
     Form(
         name="skills",
-        field="skills",
         type="text",
         title="Расскажите о своих профессиональных навыках.",
-        another=False,
         next="-callback"
     ),
     Form(
@@ -476,7 +459,6 @@ FORMS = [
         name="OPF",
         title="Организационно-правовая форма вашей деятельности.",
         type="radio",
-        field="OPF",
         options=[
             Option(
                 text="ООО",
@@ -493,22 +475,18 @@ FORMS = [
                 next="profession"
             )
         ],
-        another=False,
         next="activity_direction"
     ),
     Form(   
         name="activity_direction",
-        field="activity_direction",
         title="Укажите направление вашей деятельности",
         type="text",
         next="activity_region",
-        another=False
     ),
     Form(
         name="activity_region",
         title="В каком регионе Вас интересуют объекты?",
         type="radio",
-        field="activity_region",
         options=[
             Option(
                 text="Москва"
@@ -527,29 +505,22 @@ FORMS = [
         name="contract_price",
         title="В каком ценовом диапазоне вас интересует цена контрактов?",
         type="text",
-        field="contract_price",
         next="ceh_count",
-        another=False
     ),
     Form(
         name="ceh_count",
         title="Какова численность вашего рабочего персонала?",
         type="text",
-        field="ceh_count",
         next="-callback",
-        another=False
     ),
     Form(
         name="interest_professions",
-        field="interest_professions",
         type="text",
         title="Специалисты каких профессий Вас интересуют?",
-        next="region_professions",
-        another=False
+        next="region_professions"
     ),
     Form(
         name="region_professions",
-        field="region_professions",
         type="radio",
         title="В каком городе Вам нужны сотрудники?",
         options=[
@@ -561,5 +532,58 @@ FORMS = [
             )
         ],
         next="-cooperation"
+    ),
+    Form(
+        name="object_region",
+        title="Укажите регион объекта",
+        type="radio",
+        options=[
+            Option(
+                text="Москва"
+            ),
+            Option(
+                text="Санкт-Петербург"
+            )
+        ],
+        another_field="another_object_region",
+        next="-cooperation"
     )
 ]
+'''
+
+forms_graph = {form.name: form for form in FORMS}
+
+
+def find_furthest(start: Form, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    print(start)
+    if start not in forms_tree:
+        return 1
+
+    ns = [n for n in set(forms_tree[start]) - visited]
+    if not ns:
+        return 1
+    
+    return max(find_furthest(n, visited) for n in ns) + 1
+
+
+#print(forms_graph)
+
+forms_tree = {}
+for form in FORMS:
+    n = []
+    if form.next:
+        n.append(form.next)
+    if form.options:
+        for option in form.options:
+            if option.next:
+                n.append(option.next)
+
+    forms_tree[form.name] = n
+
+
+#print(forms_tree)
+
+#print(find_furthest('interes'))

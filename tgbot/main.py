@@ -3,7 +3,7 @@ from telebot import types  # Добавляем импорт types
 import requests
 
 # Замените 'YOUR_BOT_TOKEN' на токен вашего бота
-BOT_TOKEN = '7572740935:AAEYWglRKGGPOww-L-DwM5ZKYrwHIyUyJN4'
+BOT_TOKEN = '7796125543:AAFHVltlF0CvjBPRV5f_3OqpZdgNqsaxw0E'
 
 # Ссылка на ваше Telegram-приложение
 APP_URL = "https://kviz111.pythonanywhere.com"

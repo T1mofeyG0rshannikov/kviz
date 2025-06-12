@@ -14,6 +14,7 @@
 	<meta name="format-detection" content="telephone=no">
 	<link rel="stylesheet" href="{% static 'main/css/fonts.css' %}">
 	<link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
+	<script src="{% static 'main/libs/jquery/jquery-3.6.0.min.js' %}"></script>
 </head>
 <body class="theme-dark">
 	<div class="scale-wrapper">
@@ -45,9 +46,6 @@
 						{% endif %}
 					</div>
 				</section>
-
-				
-				
 			</div>
 
 			<script>
@@ -55,8 +53,10 @@
 			</script>
 
 			<div class="modals-wrap">
-				{% for form in forms %}
+				{% for name, form in forms.items %}
+					{% if name != "-cooperation" and name != "-callback" %}
 					{% include "main/modal.html" with data=form %}
+					{% endif %}
 				{% endfor %}
 
 				<div class="modal">
@@ -194,13 +194,13 @@
 									<input type="text" name="organization_form2" placeholder="Организация" required>
 								</div>
 								<div class="item-form">
-									<input type="email_form2" name="message_form2" placeholder="E-mail" required>
+									<input type="email_form2" name="email_form2" placeholder="E-mail" required>
 								</div>
 								<div class="item-form">
 									<input type="tel" name="phone" placeholder="+7 (___) ___-__-__" class="input-phone" required>
 								</div>
 								<div class="item-form">
-									<textarea name="message" placeholder="Сообщение"></textarea>
+									<textarea name="message_form2" placeholder="Сообщение"></textarea>
 								</div>
 								<button class="btn-main">Отправить</button>
 								<div class="agree-form">Нажимая на кнопку, я соглашаюсь с условиями <a href="#">политики конфиденциальности</a></div>

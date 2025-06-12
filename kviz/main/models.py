@@ -2,7 +2,6 @@ from django.db import models
 
 
 class Client(models.Model):
-    name = models.CharField(max_length=50, null=True)
     username = models.CharField(max_length=50, null=True)
     messanger_name = models.CharField(max_length=50)
     messanger = models.CharField(max_length=50)
@@ -19,7 +18,8 @@ class Client(models.Model):
 class Kviz(models.Model):
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
     count = models.SmallIntegerField(default=1)
-    communication_methods = models.CharField(max_length=10, null=True)
+
+    name = models.CharField(max_length=50, null=True, verbose_name="Имя, которое указал пользователь")
     phone = models.CharField(max_length=50, null=True, verbose_name="Телефон")
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     interes = models.CharField(max_length=50, null=True, verbose_name="Что интересует")
@@ -113,6 +113,68 @@ class Kviz(models.Model):
     tg = models.BooleanField(null=True, verbose_name="Телеграм")
     whatsapp = models.BooleanField(null=True, verbose_name="Ватсап")
 
+    object_region = models.CharField(null=True, max_length=200, verbose_name="регион объекта")
+    another_object_region = models.CharField(null=True, max_length=200, verbose_name="регион объекта (Другое)")
+
+    plastering_works = models.BooleanField(null=True, verbose_name="Штукатурные работы")
+    painting_work = models.BooleanField(null=True, verbose_name="Малярные работы")
+    laying_tiles = models.BooleanField(null=True, verbose_name="Укладка плитки")
+    installation_drywall = models.BooleanField(null=True, verbose_name="Монтаж гипсокартона")
+    wallpapering = models.BooleanField(null=True, verbose_name="Оклейка обоями")
+    installation_doors_and_windows = models.BooleanField(null=True, verbose_name="Установка дверей и окон")
+    ceiling_installation = models.BooleanField(null=True, verbose_name="Монтаж потолков")
+    comprehensive_finishing = models.BooleanField(null=True, verbose_name="Комплексная отделка")
+
+    metro = models.CharField(null=True, max_length=200, verbose_name="Метро")
+
+    @property
+    def created_at_tag(self):
+        return self.created_at.strftime("%Y.%m.%d %H.%M")
+
+    @property
+    def user_id(self):
+        return self.client.id
+
+    @property
+    def nickname(self):
+        return self.client.nickname
+
+    @property
+    def messanger(self):
+        return self.client.messanger
+    
+    @property
+    def unique_key(self):
+        return f"{self.client.id}-{self.count}"
+    
+    @property
+    def messanger_name(self):
+        return self.client.messanger_name
+
     class Meta:
         verbose_name = "Опрос"
         verbose_name_plural = "Опросы"
+
+
+class Form(models.Model):
+    name = models.CharField(max_length=50, verbose_name="имя")
+    title = models.CharField(max_length=150, verbose_name="заголовок")
+    type = models.CharField(max_length=10, choices=[("radio", "radio"), ("checkbox", "checkbox"), ("text", "text")])
+    
+    next = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
+    another_field = models.CharField(max_length=50, null=True, blank=True)
+    show_next = models.BooleanField(default=False, verbose_name="Показывать следующее")
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        verbose_name = "Форма"
+        verbose_name_plural = "Формы"
+        ordering = ['title']
+
+class Option(models.Model):
+    text = models.CharField(max_length=50, verbose_name="текст")
+    next = models.ForeignKey(Form, on_delete=models.SET_NULL, null=True, blank=True)
+    field = models.CharField(max_length=50, verbose_name='поле', null=True, blank=True)
+    form = models.ForeignKey(Form, on_delete=models.CASCADE, related_name="options")

@@ -1,6 +1,7 @@
 from django.contrib import admin
-from main.models import Client, Kviz
+from main.models import Client, Form, Kviz, Option
 from django.db import models
+from django.forms import inlineformset_factory
 
 
 class KvizAdmin(admin.ModelAdmin):
@@ -30,8 +31,12 @@ class KvizAdmin(admin.ModelAdmin):
         "has_work_another", "permanent_job",
         "temporary_job", "job_without_registration", "schedulefivetwo",
         "shift_schedule", "dayly_pay", "piecework_payment", "any_job", "work_another",
-        "call", "vk", "tg", "whatsapp"
+        "call", "vk", "tg", "whatsapp", "object_region", "another_object_region",
+        "plastering_works", "painting_work", "laying_tiles", "installation_drywall",
+        "wallpapering", "installation_doors_and_windows", "ceiling_installation",
+        "comprehensive_finishing", "metro"
     ]
+
 
     @admin.display(description="Дата и время")
     def created_at_tag(self, obj):
@@ -45,10 +50,6 @@ class KvizAdmin(admin.ModelAdmin):
     def nickname(self, obj):
         return obj.client.nickname
 
-    @admin.display(description="Имя, которое указал пользователь")
-    def name(self, obj):
-        return obj.client.name
-
     @admin.display(description="ТГ/ВК")
     def messanger(self, obj):
         return obj.client.messanger
@@ -60,15 +61,10 @@ class KvizAdmin(admin.ModelAdmin):
     @admin.display(description="Имя в ТГ/ВК")
     def messanger_name(self, obj):
         return obj.client.messanger_name
-    
-    def get_form(self, request, obj=None, **kwargs):
-        4/0
-        return 6/0
 
     def get_list_display(self, request):
         list_display = super().get_list_display(request)
 
-        # Заменяем все булевы поля на кастомное отображение
         def boolean_icon(obj, field_name):
             value = getattr(obj, field_name)
             if value is True:
@@ -77,17 +73,34 @@ class KvizAdmin(admin.ModelAdmin):
                 return ' '
             return '-'
 
-        # Создаем динамические методы для всех булевых полей
         for field in self.model._meta.get_fields():
             if isinstance(field, models.BooleanField):
-                # Привязываем метод к админу
                 setattr(self, f'display_{field.name}', lambda obj, fn=field.name: boolean_icon(obj, fn))
                 setattr(getattr(self, f'display_{field.name}'), 'short_description', f'{field.verbose_name}')
-                # Добавляем в list_display
                 list_display = list(list_display)
                 list_display[list_display.index(field.name)] = f'display_{field.name}'
         return list_display
     
 
+OptionInlineFormSet = inlineformset_factory(
+    Form,
+    Option,
+    fk_name='form',
+    fields=('text', 'next'),
+    extra=3,
+    can_delete=True
+)
+
+class OptionInline(admin.StackedInline):
+    model = Option
+    formset = OptionInlineFormSet
+    fk_name='form'
+
+
+class FormAdmin(admin.ModelAdmin):
+    inlines = [OptionInline]
+
+
 admin.site.register(Client)
 admin.site.register(Kviz, KvizAdmin)
+admin.site.register(Form, FormAdmin)

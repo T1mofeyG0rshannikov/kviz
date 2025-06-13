@@ -19,6 +19,7 @@ class FormI:
     next: Optional['FormI'] = None
     another_field: Optional[str] = None
     options_count: int = 0
+    show_next: bool = False
 
 
     def __hash__(self):

@@ -35,7 +35,8 @@ def get_forms():
                 ) for option in form.options.all()
             ],
             next=form.next.name if form.next else '',
-            another_field=form.another_field
+            another_field=form.another_field,
+            show_next=form.show_next
         ) for form in forms
     ]
 

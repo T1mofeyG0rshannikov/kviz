@@ -28,7 +28,6 @@ class Index(TemplateView):
         context = super().get_context_data(**kwargs)
 
         context["settings"] = IndexPage.objects.first()
-        
 
         return context
 

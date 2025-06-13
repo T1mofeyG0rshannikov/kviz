@@ -9,12 +9,13 @@
     .then(() => {
         vkBridge.send('VKWebAppGetUserInfo', {})
             .then(data => {
+                console.log(data)
                 fetch('/create-kviz', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    body: `nickname=${data.id}&messanger_name=${data.first_name}&messanger=vk`
+                    body: `user_id=${data.id}&messanger_name=${data.first_name}&messanger=vk`
                 })
                 .then(response => response.json())
                 .then(data => {

@@ -55,11 +55,17 @@ $(document).ready(function () {
 		const maxsteps = +$activeModal.attr('data-maxsteps')
 
 		if (index !== -1) {
-			console.log(((modalIndex + 1) / (modalIndex + 1 + maxsteps)) * 100)
-			var percent = Math.max(((modalIndex + 1) / (modalIndex + 1 + maxsteps)) * 100, progressBarPercent);
-			progressBarPercent = percent;
-			console.log(progressBarPercent)
-			$activeModal.find('.progressbar__value').css('width', percent + '%');
+			if (isNaN(maxsteps)){
+				progressBarPercent = 0;
+			}
+			else{
+				console.log(((modalIndex + 1) / (modalIndex + 1 + maxsteps)) * 100)
+				console.log(progressBarPercent)
+				var percent = Math.max(((modalIndex + 1) / (modalIndex + 1 + maxsteps)) * 100, progressBarPercent);
+				progressBarPercent = percent;
+				console.log(progressBarPercent)
+				$activeModal.find('.progressbar__value').css('width', percent + '%');
+			}
 		}
 	}
 
@@ -110,7 +116,8 @@ $(".prev-modal").click(function (e) {
 });
 $('.another-input').on('input', function (e) {
 	e.preventDefault();
-	$(this).parents('.modal').find(".modal__buttons").first().css("display", "block");
+	$(this).parents('.modal').find(".modal__buttons").first().css("display", "flex");
+	$(this).parents('.modal').find(".next-modal").first().css("display", "flex");
 })
 $(".next-modal").click(function (e) {
 	e.preventDefault();

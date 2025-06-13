@@ -10,7 +10,7 @@
 	<meta charset="utf-8">
 	<title>Заголовок</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<meta name="format-detection" content="telephone=no">
 	<link rel="stylesheet" href="{% static 'main/css/fonts.css' %}">
 	<link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
@@ -58,25 +58,6 @@
 					{% include "main/modal.html" with data=form %}
 					{% endif %}
 				{% endfor %}
-
-				<div class="modal">
-					<div class="modal__content">
-						<div class="modal__close"></div>
-						<div class="modal__inner">
-							<div class="progressbar">
-								<div class="progressbar__value"></div>
-							</div>
-							<div class="modal__title">Расскажите о своем опыте работы</div>
-							<div class="item-form">
-								<textarea placeholder="Опишите свой опыт ..."></textarea>
-							</div>
-							<div class="modal__buttons">
-								<button class="btn-page btn-page_border prev-modal"><img src="{% static 'main/img/arrow.svg' %}" alt="alt"> Назад</button>
-								<button class="btn-page next-modal">Далее  <img src="{% static 'main/img/arrow.svg' %}" alt="alt"></button>
-							</div>
-						</div>
-					</div>
-				</div>
 
 				<div class="modal modal_form modal__callback" id="modal-callback">
 					<div class="modal__content">

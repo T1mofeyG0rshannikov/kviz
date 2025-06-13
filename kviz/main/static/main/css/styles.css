@@ -436,6 +436,9 @@ body {
 	background-size: contain;
 	transition: .2s;
 }
+.radio__fake{
+	flex: none!important;
+}
 .radio__fake::before,
 .radio input::before {
 	background-image: url(../img/radio.svg);

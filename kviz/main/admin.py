@@ -44,7 +44,7 @@ class KvizAdmin(admin.ModelAdmin):
 
     @admin.display(description="User ID")
     def user_id(self, obj):
-        return obj.client.id
+        return obj.client.user_id
 
     @admin.display(description="Никнейм")
     def nickname(self, obj):

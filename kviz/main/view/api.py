@@ -38,7 +38,7 @@ class CreateKvizView(View):
         data = request.POST
         print(data)
 
-        client = Client.objects.filter(nickname=data["nickname"], messanger=data["messanger"]).first()
+        client = Client.objects.filter(user_id=data["user_id"], nickname=data["nickname"], messanger=data["messanger"]).first()
         if client:
             old_kviz = Kviz.objects.filter(client=client).last()
 

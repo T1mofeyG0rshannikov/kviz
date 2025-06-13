@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Client(models.Model):
+    user_id = models.CharField(max_length=20, null=True)
     username = models.CharField(max_length=50, null=True)
     messanger_name = models.CharField(max_length=50)
     messanger = models.CharField(max_length=50)
@@ -172,6 +173,7 @@ class Form(models.Model):
         verbose_name = "Форма"
         verbose_name_plural = "Формы"
         ordering = ['title']
+
 
 class Option(models.Model):
     text = models.CharField(max_length=50, verbose_name="текст")

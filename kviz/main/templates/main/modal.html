@@ -59,9 +59,9 @@
             {% endif %}
 
             {% if data.another_field %}
-            <div class="checkbox checkbox_another">
+            <div class="checkbox checkbox_another" style="margin-top: 10px;">
                 <label>
-                    <span class="checkbox__fake"></span>
+                    <span class="{{ data.type }}__fake"></span>
                     <span class="checkbox__click"></span>
                     <span>Другое <input type="text" class="another-input" data-field="{{ data.another_field }}" placeholder="Введите другой вариант"></span>
                 </label>

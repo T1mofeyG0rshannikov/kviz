@@ -3,7 +3,7 @@
 <form
     class="modal" 
     {% if data.next %}data-modal="{{ data.next }}"{% endif %}
-    {% if data.field %}data-field="{{ data.field }}"{% endif %}
+    data-field="{{ data.name }}"
     {% if data.type %}data-type="{{ data.type }}"{% endif %}
     id="modal{{data.name}}"
     data-maxsteps="{{ data.max_steps }}"

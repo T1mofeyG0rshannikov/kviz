@@ -1,4 +1,5 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.views import View
 from main.models import Client, Kviz
 
@@ -8,6 +9,17 @@ import io
 import openpyxl
 from openpyxl.utils import get_column_letter
 from main.models import Client
+from django.contrib.auth.models import User
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class LoginView(View):
+    def post(self, request):
+        user = User.objects.get(username=request.POST["username"])
+        if user.check_password(request.POST["password"]):
+            return HttpResponse(status=200)
+        
+        return HttpResponse(status=401)
 
 
 @method_decorator(csrf_exempt, name="dispatch")
@@ -38,22 +50,32 @@ class CreateKvizView(View):
         data = request.POST
         print(data)
 
-        client = Client.objects.filter(nickname=data["nickname"], messanger=data["messanger"]).first()
-        if client:
-            old_kviz = Kviz.objects.filter(client=client).last()
+        client = get_object_or_404(Client, id=data['client_id'])
 
-            kviz = Kviz.objects.create(client=client, count=old_kviz.count+1)
-        else:
+        kviz_count = Kviz.objects.filter(client=client).count()
+
+        kviz = Kviz.objects.create(client=client, count=kviz_count+1)
+
+        return JsonResponse({"kviz": kviz.id})
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class GetClientView(View):
+    def post(self, request: HttpRequest):
+        data = request.POST
+        print(data)
+
+        client = Client.objects.filter(user_id=data["user_id"], messanger=data["messanger"]).first()
+
+        if not client:
             client = Client.objects.create(
                 user_id=data["user_id"],
                 messanger=data["messanger"],
                 messanger_name=data.get("messanger_name"),
                 nickname=data.get("nickname")
             )
-                
-            kviz = Kviz.objects.create(client=client, count=1)
 
-        return JsonResponse({"kviz": kviz.id})
+        return JsonResponse({"client": client.id})
 
 
 class GetClientsExcel(View):

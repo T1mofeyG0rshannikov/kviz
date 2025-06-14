@@ -18,16 +18,17 @@ def start(message):
     messsanger_name = message.from_user.first_name
     id = message.from_user.id
 
-    kviz = requests.post(APP_URL + "/create-kviz", data={"user_id": id, "nickname": nickname, "messanger": "tg", "messanger_name": messsanger_name})
-    print(kviz.status_code)
-    kviz = kviz.json()
-    kviz = kviz["kviz"]
+    response = requests.post(APP_URL + "/client", data={"user_id": id, "nickname": nickname, "messanger": "tg", "messanger_name": messsanger_name})
+    print(response.status_code)
+    client = response.json()
+    client = client["client"]
+    print(client)
 
     keyboard = types.InlineKeyboardMarkup()
 
     web_app_button = telebot.types.InlineKeyboardButton(
         text="Открыть приложение",
-        web_app=telebot.types.WebAppInfo(url=APP_URL + f"/kviz?kviz={kviz}")
+        web_app=telebot.types.WebAppInfo(url=APP_URL + f"/kviz?client={client}")
     )
 
     keyboard.add(web_app_button)

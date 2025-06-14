@@ -1,5 +1,5 @@
 from main.forms.get_forms import get_forms
-from main.models import Kviz
+from main.models import Client
 from django.views.generic import TemplateView
 
 from seo.models import IndexPage
@@ -10,10 +10,10 @@ class KvizView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        kviz_id = self.request.GET.get("kviz")
-        kviz = Kviz.objects.get(id=int(kviz_id))
+        client_id = self.request.GET.get("client")
+        client = Client.objects.get(id=int(client_id))
 
-        context["kviz"] = kviz
+        context["client"] = client
         context["settings"] = IndexPage.objects.first()
 
         context["forms"] = get_forms()

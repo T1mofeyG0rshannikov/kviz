@@ -9,7 +9,7 @@ class Client(models.Model):
     nickname = models.CharField(max_length=50, null=True)
 
     def __str__(self):
-        return self.username if self.username else "username"
+        return self.username if self.username else self.messanger_name
 
     class Meta:
         verbose_name = "Пользователь"
@@ -168,7 +168,7 @@ class Form(models.Model):
     show_next = models.BooleanField(default=False, verbose_name="Показывать следующее")
 
     def __str__(self):
-        return self.title
+        return self.name + " - " + self.title
     
     class Meta:
         verbose_name = "Форма"

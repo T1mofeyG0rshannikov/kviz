@@ -19,9 +19,7 @@
 <body class="theme-dark">
 	<div class="scale-wrapper">
 		<div class="layout">
-
 			<div class="wrapper">
-
 				<header class="header"> 
 					<div class="header__wrapper"> 
 						<a href="/" class="logo">
@@ -49,7 +47,7 @@
 			</div>
 
 			<script>
-				var kviz = "{{ kviz.id }}";
+				var client = "{{ client.id }}";
 			</script>
 
 			<div class="modals-wrap">
@@ -197,10 +195,10 @@
 		<a href="{{ settings.privacy_link }}" class="link-page">Политика конфиденциальности</a>
 	</footer>
 
-
 	<script src="{% static 'main/libs/jquery/jquery-3.6.0.min.js' %}"></script>
 	<script src="{% static 'main/libs/mask/jquery.maskedinput.js' %}"></script>
 	<script src="{% static 'main/js/sendAnswer.js' %}"></script>
 	<script src="{% static 'main/js/common.js' %}"></script>
+	<script src="https://telegram.org/js/telegram-web-app.js"></script>
 </body>
 </html>

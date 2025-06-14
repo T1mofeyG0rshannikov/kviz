@@ -1,9 +1,9 @@
+var kviz = 0
 $(document).ready(function () {
 	setTimeout(() => {
 		$('.open-modal').click()
 	}, 1400)
 
-	//marquee
 	const $marquee = $('.marquee');
 	const speed = 60; 
 
@@ -81,13 +81,26 @@ $(document).ready(function () {
 			$(".modal-overlay").removeClass("active");
 			$("body").removeClass("body_modal");
 		}, 500);
-
+		progressBarPercent = 0;
+		modalIndex = 0;
 		updateProgressBar();
 	});
 
 	//modals
 	$(".open-modal").click(function (e) {
 		e.preventDefault();
+		fetch(`/create-kviz`, {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: `client_id=${client}`
+		}).then(response => response.json()).then(
+			response => {
+				kviz = response.kviz
+			}
+		)
+		
 		if ($("#modalinteres").hasClass("active")) {
 			$("#modalinteres").removeClass("active").removeClass("zoom-in").addClass("zoom-out");
 			$(".modal-overlay").removeClass("active");

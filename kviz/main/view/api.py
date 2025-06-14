@@ -38,21 +38,20 @@ class CreateKvizView(View):
         data = request.POST
         print(data)
 
-        client = Client.objects.filter(user_id=data["user_id"], nickname=data["nickname"], messanger=data["messanger"]).first()
+        client = Client.objects.filter(nickname=data["nickname"], messanger=data["messanger"]).first()
         if client:
             old_kviz = Kviz.objects.filter(client=client).last()
 
             kviz = Kviz.objects.create(client=client, count=old_kviz.count+1)
         else:
             client = Client.objects.create(
+                user_id=data["user_id"],
                 messanger=data["messanger"],
                 messanger_name=data.get("messanger_name"),
                 nickname=data.get("nickname")
             )
                 
             kviz = Kviz.objects.create(client=client, count=1)
-
-
 
         return JsonResponse({"kviz": kviz.id})
 

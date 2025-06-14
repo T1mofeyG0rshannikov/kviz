@@ -2,22 +2,16 @@ from main.models import Form
 from main.forms.interface import FormI, OptionI
 
 
-def find_furthest(start: FormI, forms_tree, forms, visited=None):
-    if visited is None:
-        visited = set()
-    visited.add(start)
-
+def find_furthest(start: FormI, forms_tree, forms):
     if start not in forms_tree:
         return 1
 
-    ns = [n for n in set(forms_tree[start]) - visited]
+    ns = [n for n in set(forms_tree[start])]
+
     if not ns:
-        forms[start].max_steps = 1
         return 1
-    
-    max_steps = max(find_furthest(n, forms_tree, forms, visited) for n in ns) + 1
-    forms[start].max_steps = max_steps
-    return max_steps
+
+    return max(find_furthest(n, forms_tree, forms) for n in ns) + 1
 
 
 def get_forms():
@@ -58,7 +52,8 @@ def get_forms():
 
         forms_tree[form.name] = n
 
-
-    find_furthest('interes', forms_tree, forms)
-
+    for form in forms:
+        forms[form].max_steps = find_furthest(form, forms_tree, forms)
+    for form in forms:
+        print(form, forms[form].max_steps)
     return forms

@@ -125,6 +125,7 @@ class Kviz(models.Model):
     installation_doors_and_windows = models.BooleanField(null=True, verbose_name="Установка дверей и окон")
     ceiling_installation = models.BooleanField(null=True, verbose_name="Монтаж потолков")
     comprehensive_finishing = models.BooleanField(null=True, verbose_name="Комплексная отделка")
+    another_finisher = models.CharField(null=True, max_length=200, verbose_name="Отделочник (другое)")
 
     metro = models.CharField(null=True, max_length=200, verbose_name="Метро")
 

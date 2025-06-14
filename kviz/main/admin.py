@@ -34,7 +34,7 @@ class KvizAdmin(admin.ModelAdmin):
         "call", "vk", "tg", "whatsapp", "object_region", "another_object_region",
         "plastering_works", "painting_work", "laying_tiles", "installation_drywall",
         "wallpapering", "installation_doors_and_windows", "ceiling_installation",
-        "comprehensive_finishing", "metro"
+        "comprehensive_finishing", "another_finisher", "metro"
     ]
 
 

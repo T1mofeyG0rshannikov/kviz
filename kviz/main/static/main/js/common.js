@@ -173,14 +173,12 @@ $(".next-modal").click(function (e) {
 	console.log(modalsHistory);
 
 	const type = $currentTab.attr('data-type');
-	let inputs = $currentTab.find("input");
+	let inputs = $currentTab.find("input[type=checkbox], input[type=radio]");
 
 	if (type === "checkbox"){
 		inputs.each(function(){
-			if (this.checked){
-				fieldsToUpdate.push($(this).attr('data-field'))
-				valuesToUpdate.push(true);
-			}
+			fieldsToUpdate.push($(this).attr('data-field'))
+			valuesToUpdate.push(this.checked)
 		});
 	}
 	sendAnswer(kviz, fieldsToUpdate, valuesToUpdate)

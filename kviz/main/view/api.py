@@ -117,7 +117,7 @@ class GetClientsExcel(View):
             "Телеграм", "Ватсап", "регион объекта", "регион объекта (Другое)",
             "Штукатурные работы", "Малярные работы", "Укладка плитки", "Монтаж гипсокартона",
             "Оклейка обоями", "Установка дверей и окон", "Монтаж потолков",
-            "Комплексная отделка", "Метро"
+            "Комплексная отделка", "Отделочник (другое)", "Метро"
         ]
 
         fields = [
@@ -147,10 +147,10 @@ class GetClientsExcel(View):
             "call", "vk", "tg", "whatsapp", "object_region", "another_object_region",
             "plastering_works", "painting_work", "laying_tiles",
             "installation_drywall", "wallpapering", "installation_doors_and_windows",
-            "ceiling_installation", "comprehensive_finishing", "metro"
+            "ceiling_installation", "comprehensive_finishing", "another_finisher", "metro"
         ]
     
-        kvizes = Kviz.objects.select_related("client").all()
+        kvizes = Kviz.objects.select_related("client").order_by("-id").all()
 
         for field, letter in zip(titles, titles_letters):
             sheet[letter + '1'] = field

@@ -135,7 +135,7 @@ class Kviz(models.Model):
 
     @property
     def user_id(self):
-        return self.client.id
+        return self.client.user_id
 
     @property
     def nickname(self):

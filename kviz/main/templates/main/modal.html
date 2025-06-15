@@ -115,7 +115,9 @@
             {% endif %}
             <script>
                 $('input:checkbox').on('change', function() {
-                    if ($(this).is(':checked')) {
+                    var $currentModal = $(this).closest('.modal')
+                    var checkedCount = $currentModal.find('input[type="checkbox"]').filter(':checked').length;
+                    if (checkedCount > 0) {
                         showNextButton()
                     }
                     else{

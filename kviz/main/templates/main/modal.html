@@ -144,9 +144,9 @@
                 }
             </script>
 
-            <div class="modal__buttons" {% if data.type == "radio" %}style="display: none;"{% endif %}>
+            <div class="modal__buttons" {% if data.type == "radio" %} data-hide="true" style="display: none;"{% else %}data-hide="false"{% endif %}>
                 <button class="btn-page btn-page_border prev-modal"><img src="{% static 'main/img/arrow.svg' %}" alt="alt"> Назад</button>
-                <button {% if not data.show_next %}style="display: none;"{% endif %} class="btn-page next-modal">Далее <img src="{% static 'main/img/arrow.svg' %}" alt="alt"></button>
+                <button {% if not data.show_next %} data-hide="true" style="display: none;"{% else %}data-hide="false"{% endif %} class="btn-page next-modal">Далее <img src="{% static 'main/img/arrow.svg' %}" alt="alt"></button>
             </div>
         </div>
     </div>

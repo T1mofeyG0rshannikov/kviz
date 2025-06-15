@@ -53,7 +53,19 @@ $(document).ready(function () {
 		var index = $modals.index($activeModal);
 		$activeModal.closest('form').trigger('reset')
 		const maxsteps = +$activeModal.attr('data-maxsteps')
-
+		const $buttons = $activeModal.find(".modal__buttons").first();
+		if ($buttons.attr("data-hide") !== "false"){
+			$buttons.css("display", "none")
+		}
+		const $next = $buttons.find(".next-modal").first();
+		if ($next.attr("data-hide") !== "false"){
+			$next.css("display", "none")
+		}
+		
+		$activeModal.find('.checkbox_another').each(function(){
+			this.classList.remove("active")
+		});
+			
 		if (index !== -1) {
 			if (isNaN(maxsteps)){
 				progressBarPercent = 0;
@@ -143,7 +155,7 @@ $(".next-modal").click(function (e) {
 	const newModalName = `modal${$($currentTab).attr('data-modal')}`;
 	var $nextTab = document.getElementById(newModalName);
 
-	const textField = $currentTab.find('input[type=text]').first();
+	const textField = $currentTab.find('input[type=text], input[type=number]').first();
 	if (textField.val() && textField.val().length > 0){
 		if (textField.hasClass("another-input")){
 			fieldsToUpdate.push(textField.attr('data-field'));
@@ -382,7 +394,7 @@ function scaleLayout() {
   const scaleY = window.innerHeight / 568;
   const scale = Math.min(scaleX, scaleY);
 
-  layout.style.transform = `scale(${scale})`;
+  /*layout.style.transform = `scale(${scale})`;*/
 
   layout.classList.add('layout_visible'); 
 }

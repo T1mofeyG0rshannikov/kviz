@@ -10,7 +10,7 @@
         vkBridge.send('VKWebAppGetUserInfo', {})
             .then(data => {
                 console.log(data)
-                fetch('/create-kviz', {
+                fetch('/client', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -20,7 +20,18 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log('Ответ от сервера:', data);
-                    window.location.href = `/kviz/?kviz=${data.kviz}`;
+
+                    vkBridge.send('VKWebAppGetClientSettings')
+                    .then(data => {
+                        console.log("VKWebAppGetClientSettings data:", data);
+                        const isDarkTheme = data.appearance === "dark";
+
+                        console.log("Используется темная тема:", isDarkTheme);
+                        // Дальнейшая обработка темы
+                    })
+                    .catch(error => console.error("VKWebAppGetClientSettings error:", error));
+
+                    window.location.href = `/kviz/?client=${data.client}&messanger=vk`;
                 })
                 .catch(error => console.error("Ошибка отправки данных на сервер:", error));
             })

@@ -60,20 +60,25 @@ class CreateKvizView(View):
 
 
 @method_decorator(csrf_exempt, name="dispatch")
-class GetClientView(View):
+class ClientView(View):
     def post(self, request: HttpRequest):
         data = request.POST
         print(data)
 
-        client = Client.objects.filter(user_id=data["user_id"], messanger=data["messanger"]).first()
+        client = Client.objects.create(
+            user_id=data["user_id"],
+            messanger=data["messanger"],
+            messanger_name=data.get("messanger_name"),
+            nickname=data.get("nickname")
+        )
 
-        if not client:
-            client = Client.objects.create(
-                user_id=data["user_id"],
-                messanger=data["messanger"],
-                messanger_name=data.get("messanger_name"),
-                nickname=data.get("nickname")
-            )
+        return JsonResponse({"client": client.id})
+
+    def get(self, request: HttpRequest):
+        data = request.POST
+        print(data)
+
+        client =  get_object_or_404(Client, user_id=data["user_id"], messanger=data["messanger"])
 
         return JsonResponse({"client": client.id})
 
@@ -180,3 +185,15 @@ class GetClientsExcel(View):
         response['Content-Disposition'] = 'attachment; filename="Опросы.xlsx"'
 
         return response
+    
+
+class GetKvizCountView(View):
+    def get(self, request: HttpRequest):
+        data = request.GET
+        print(data)
+
+        client = get_object_or_404(Client, id=data['client_id'])
+
+        kviz_count = Kviz.objects.filter(client=client).count()
+
+        return JsonResponse({"kviz_count": kviz_count})

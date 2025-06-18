@@ -28,7 +28,7 @@ def start(message):
 
     web_app_button = telebot.types.InlineKeyboardButton(
         text="Открыть приложение",
-        web_app=telebot.types.WebAppInfo(url=APP_URL + f"/kviz?client={client}")
+        web_app=telebot.types.WebAppInfo(url=APP_URL + f"/kviz?client={client}&messanger=tg")
     )
 
     keyboard.add(web_app_button)
@@ -37,6 +37,7 @@ def start(message):
 user_states = {}
 
 draft_data = {}
+
 
 @bot.message_handler(commands=['rassilka'])
 def handle_rassilka_start(message: types.Message):
@@ -133,4 +134,4 @@ def handle_message(message: types.Message):
 
 if __name__ == '__main__':
     print("Бот запущен...")
-    bot.infinity_polling()
+    bot.polling(none_stop=True)

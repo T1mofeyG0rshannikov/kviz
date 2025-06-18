@@ -1,4 +1,86 @@
 var kviz = 0
+
+function closeModal(){
+	$(".modal").removeClass("zoom-in").addClass("zoom-out");
+
+	setTimeout(() => {
+		$(".modal").removeClass("active")
+	}, 500);
+
+	setTimeout(() => {
+		$(".modal-overlay").removeClass("active");
+		$("body").removeClass("body_modal");
+	}, 500);
+	progressBarPercent = 0;
+	modalIndex = 0;
+	updateProgressBar();
+}
+
+function openInteres(){
+	fetch(`/create-kviz`, {
+		method: "POST",
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded',
+		},
+		body: `client_id=${client}`
+	}).then(response => response.json()).then(
+		response => {
+			kviz = response.kviz
+		}
+	)
+
+	if ($("#modalinteres").hasClass("active")) {
+		$("#modalinteres").removeClass("active").removeClass("zoom-in").addClass("zoom-out");
+		$(".modal-overlay").removeClass("active");
+		$("body").removeClass("body_modal");
+	} else {
+		$("#modalinteres").addClass("zoom-in").removeClass("zoom-out").addClass("active");
+		$(".modal-overlay").addClass("active");
+		$("body").addClass("body_modal");
+	}
+
+	updateProgressBar();
+}
+
+//progressbar
+var progressBarPercent = 0;
+function updateProgressBar() {
+	var $modals = $('.modal');
+	var $activeModal = $modals.filter('.active');
+	var index = $modals.index($activeModal);
+	$activeModal.closest('form').trigger('reset')
+	const maxsteps = +$activeModal.attr('data-maxsteps')
+	const $buttons = $activeModal.find(".modal__buttons").first();
+	if ($buttons.attr("data-hide") !== "false"){
+		$buttons.css("display", "none")
+	}
+	const $next = $buttons.find(".next-modal").first();
+	if ($next.attr("data-hide") !== "false"){
+		$next.css("display", "none")
+	}
+	
+	/*if ($activeModal.attr("data-moda") == "-callback" || $activeModal.attr("data-modal") == "-cooperation"){
+
+	}*/
+	$activeModal.find('.checkbox_another').each(function(){
+		this.classList.remove("active")
+	});
+		
+	if (index !== -1) {
+		if (isNaN(maxsteps)){
+			progressBarPercent = 0;
+		}
+		else{
+			console.log(((modalIndex + 1) / (modalIndex + 1 + maxsteps)) * 100)
+			console.log(progressBarPercent)
+			var percent = Math.max(((modalIndex + 1) / (modalIndex + 1 + maxsteps)) * 100, progressBarPercent);
+			progressBarPercent = percent;
+			console.log(progressBarPercent)
+			$activeModal.find('.progressbar__value').css('width', percent + '%');
+		}
+	}
+}
+
 $(document).ready(function () {
 	setTimeout(() => {
 		$('.open-modal').click()
@@ -45,85 +127,35 @@ $(document).ready(function () {
 		}, 1500);
   });
 
-	//progressbar
-	var progressBarPercent = 0;
-	function updateProgressBar() {
-		var $modals = $('.modal');
-		var $activeModal = $modals.filter('.active');
-		var index = $modals.index($activeModal);
-		$activeModal.closest('form').trigger('reset')
-		const maxsteps = +$activeModal.attr('data-maxsteps')
-		const $buttons = $activeModal.find(".modal__buttons").first();
-		if ($buttons.attr("data-hide") !== "false"){
-			$buttons.css("display", "none")
-		}
-		const $next = $buttons.find(".next-modal").first();
-		if ($next.attr("data-hide") !== "false"){
-			$next.css("display", "none")
-		}
-		
-		$activeModal.find('.checkbox_another').each(function(){
-			this.classList.remove("active")
-		});
-			
-		if (index !== -1) {
-			if (isNaN(maxsteps)){
-				progressBarPercent = 0;
-			}
-			else{
-				console.log(((modalIndex + 1) / (modalIndex + 1 + maxsteps)) * 100)
-				console.log(progressBarPercent)
-				var percent = Math.max(((modalIndex + 1) / (modalIndex + 1 + maxsteps)) * 100, progressBarPercent);
-				progressBarPercent = percent;
-				console.log(progressBarPercent)
-				$activeModal.find('.progressbar__value').css('width', percent + '%');
-			}
-		}
-	}
-
 	$(".modal__close").click(function (e) {
 		e.preventDefault();
-		$(".modal").removeClass("zoom-in").addClass("zoom-out");
-
-		setTimeout(() => {
-			$(".modal").removeClass("active")
-		}, 500);
-
-		setTimeout(() => {
-			$(".modal-overlay").removeClass("active");
-			$("body").removeClass("body_modal");
-		}, 500);
-		progressBarPercent = 0;
-		modalIndex = 0;
-		updateProgressBar();
+		closeModal()
 	});
 
 	//modals
 	$(".open-modal").click(function (e) {
 		e.preventDefault();
-		fetch(`/create-kviz`, {
-			method: "POST",
+
+		fetch(`/kviz-count?client_id=${client}`, {
+			method: "GET",
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: `client_id=${client}`
+			}
 		}).then(response => response.json()).then(
 			response => {
-				kviz = response.kviz
+				kviz_count = response.kviz_count
+				console.log(kviz_count)
+
+				if (kviz_count > 0){
+					$("#modalrepeat").addClass("zoom-in").removeClass("zoom-out").addClass("active");
+					$(".modal-overlay").addClass("active");
+					$("body").addClass("body_modal");
+				}
+				else{
+					openInteres()
+				}
 			}
 		)
-		
-		if ($("#modalinteres").hasClass("active")) {
-			$("#modalinteres").removeClass("active").removeClass("zoom-in").addClass("zoom-out");
-			$(".modal-overlay").removeClass("active");
-			$("body").removeClass("body_modal");
-		} else {
-			$("#modalinteres").addClass("zoom-in").removeClass("zoom-out").addClass("active");
-			$(".modal-overlay").addClass("active");
-			$("body").addClass("body_modal");
-		}
-
-		updateProgressBar();
 	});
 
 $(".prev-modal").click(function (e) {
@@ -402,3 +434,17 @@ window.addEventListener('load', scaleLayout);
 
 var modalsHistory = ["modalinteres"];
 var modalIndex = 0;
+
+
+$(".theme-change").on('click', function(){
+	if (document.body.classList.contains("theme-dark")){
+		document.body.classList.remove("theme-dark")
+		document.getElementById("moon").style.display = "block"
+		document.getElementById("sun").style.display = "none"
+	}
+	else{
+		document.getElementById("sun").style.display = "block"
+		document.getElementById("moon").style.display = "none"
+		document.body.classList.add("theme-dark")
+	}
+})

@@ -41,18 +41,21 @@
                     <input type="{% if data.name == 'birth_year' %}number{% else %}text{% endif %}" class="text" placeholder="Введите другой вариант" />
                     <style>
                         .modal .text{
-                        font-size: 13px;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        border: none;
-                        margin: 0;
-                        padding: 0;
-                        border: none;
-                        font-family: "Roboto";
-                        background: #000;
-                        color: #fff;
+                            font-size: 13px;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            border: none;
+                            margin: 0;
+                            padding: 0;
+                            border: none;
+                            font-family: "Roboto";
+                        }
+
+                        .theme-dark .modal .text{
+                            background: #000;
+                            color: #fff;
                         }
                     </style>
                 </label>
@@ -68,51 +71,6 @@
             </div>
             {% endif %}
 
-            {% if data.name == "birth_year" %}
-            <script>
-                const input = document.querySelector('#modalbirth_year').querySelector('input');
-
-                const currentYear = new Date().getFullYear();
-                const maxYear = currentYear - 13;
-                const minYear = currentYear - 75;
-
-                input.min = minYear;
-                input.max = maxYear;
-
-                input.addEventListener('change', () => {
-                    const value = parseInt(input.value, 10);
-                    
-                    if (isNaN(value)) {
-                        input.value = '';
-                    return;
-                    }
-
-                    if (value < minYear) {
-                        input.value = minYear;
-                    } else if (value > maxYear) {
-                        input.value = maxYear;
-                    }
-
-                    if (input.value){
-                        showNextButton()
-                    }
-                    else{
-                        hideNextButton()
-                    }
-                });
-
-                input.addEventListener('input', () => {
-                    const value = parseInt(input.value, 10);
-                    console.log(value)
-                   
-                    if (value > minYear && value < maxYear) {
-                        showNextButton()
-                    } else if (value > maxYear) {
-                        hideNextButton()
-                    }
-                });
-            </script>
-            {% endif %}
             <script>
                 $('input:checkbox').on('change', function() {
                     var $currentModal = $(this).closest('.modal')
@@ -124,7 +82,7 @@
                         hideNextButton()
                     }
                 });
-                $('.text:text').on('input', function (e) {
+                $('.text').on('input', function (e) {
                     e.preventDefault();
                     textInput(e.target.value);
                 })

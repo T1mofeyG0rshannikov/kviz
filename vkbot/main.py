@@ -18,6 +18,7 @@ vk = vk_session.get_api()
 
 longpoll = VkBotLongPoll(vk_session, GROUP_ID)
 
+
 def download_file(url, filename):
     """Скачивает файл по URL и сохраняет его локально."""
     try:
@@ -32,6 +33,7 @@ def download_file(url, filename):
     except requests.exceptions.RequestException as e:
         print(f"Ошибка при скачивании файла: {e}")
         return False
+
 
 def send_message(user_id, message, attachment=None):
     """Отправляет сообщение пользователю с возможностью прикрепления вложения."""
@@ -80,7 +82,6 @@ def main():
                     message=f"Вот ссылка на приложение: {APP_URL}",
                     random_id=0
                 )
-
 
             elif message.lower() == "рассылка":
                 user_states[user_id] = 'auth'

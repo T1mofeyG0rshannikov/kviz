@@ -13,6 +13,10 @@ class KvizView(TemplateView):
         client_id = self.request.GET.get("client")
         client = Client.objects.get(id=int(client_id))
 
+        messanger = self.request.GET.get("messanger")
+
+        context['theme'] = self.request.GET.get("theme")
+        context['messanger'] = messanger
         context["client"] = client
         context["settings"] = IndexPage.objects.first()
 

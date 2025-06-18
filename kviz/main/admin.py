@@ -40,7 +40,7 @@ class KvizAdmin(admin.ModelAdmin):
 
     @admin.display(description="Дата и время")
     def created_at_tag(self, obj):
-        return obj.created_at.strftime("%Y.%m.%d %H.%M")
+        return obj.created_at.strftime('%d.%m.%y %H:%M')
 
     @admin.display(description="User ID")
     def user_id(self, obj):

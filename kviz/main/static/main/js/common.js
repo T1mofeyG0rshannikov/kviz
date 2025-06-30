@@ -1,5 +1,21 @@
 var kviz = 0
 
+function sendAnswer(kviz, field, value){
+    fetch(`/answer`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `kviz=${kviz}&field=${field.join(';')}&value=${value.join(';')}`
+    })
+}
+
+function submitRepeat(){
+	document.getElementById("modalrepeat").classList.remove("zoom-in")
+	document.getElementById("modalrepeat").classList.remove("active")
+	openInteres()
+}
+
 function closeModal(){
 	$(".modal").removeClass("zoom-in").addClass("zoom-out");
 
@@ -65,7 +81,7 @@ function updateProgressBar() {
 	$activeModal.find('.checkbox_another').each(function(){
 		this.classList.remove("active")
 	});
-		
+
 	if (index !== -1) {
 		if (isNaN(maxsteps)){
 			progressBarPercent = 0;
@@ -82,9 +98,56 @@ function updateProgressBar() {
 }
 
 $(document).ready(function () {
+	scaleLayout()
+	$(".theme-change").on('click', function(){
+		if (document.body.classList.contains("theme-dark")){
+			document.body.classList.remove("theme-dark")
+			document.querySelector(".scale-wrapper").style.backgroundColor = 'white'
+			document.getElementById("moon").style.display = "block"
+			document.getElementById("sun").style.display = "none"
+		}
+		else{
+			document.querySelector(".scale-wrapper").style.backgroundColor = 'black'
+			document.getElementById("sun").style.display = "block"
+			document.getElementById("moon").style.display = "none"
+			document.body.classList.add("theme-dark")
+		}
+	})
+
 	setTimeout(() => {
 		$('.open-modal').click()
 	}, 1400)
+
+	$('input:checkbox').on('change', function() {
+		var $currentModal = $(this).closest('.modal')
+		var checkedCount = $currentModal.find('input[type="checkbox"]').filter(':checked').length;
+		if (checkedCount > 0) {
+			showNextButton()
+		}
+		else{
+			hideNextButton()
+		}
+	});
+	$('.text').on('input', function (e) {
+		e.preventDefault();
+		textInput(e.target.value);
+	})
+
+	function showNextButton(){
+		$('.active').find('.next-modal').css('display', 'flex')
+	}
+	function hideNextButton(){
+		$('.active').find('.next-modal').css('display', 'none')
+	}
+
+	function textInput(value){
+		if (value){
+			showNextButton()
+		}
+		else{
+			hideNextButton()
+		}
+	}
 
 	const $marquee = $('.marquee');
 	const speed = 60; 
@@ -424,27 +487,13 @@ function scaleLayout() {
   const scaleY = window.innerHeight / 568;
   const scale = Math.min(scaleX, scaleY);
 
-  /*layout.style.transform = `scale(${scale})`;*/
+  layout.style.transform = `scale(${scale})`;
 
   layout.classList.add('layout_visible'); 
 }
-
+/*
 window.addEventListener('resize', scaleLayout);
 window.addEventListener('load', scaleLayout);
-
+*/
 var modalsHistory = ["modalinteres"];
 var modalIndex = 0;
-
-
-$(".theme-change").on('click', function(){
-	if (document.body.classList.contains("theme-dark")){
-		document.body.classList.remove("theme-dark")
-		document.getElementById("moon").style.display = "block"
-		document.getElementById("sun").style.display = "none"
-	}
-	else{
-		document.getElementById("sun").style.display = "block"
-		document.getElementById("moon").style.display = "none"
-		document.body.classList.add("theme-dark")
-	}
-})

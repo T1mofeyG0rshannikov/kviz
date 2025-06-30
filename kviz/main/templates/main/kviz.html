@@ -8,27 +8,28 @@
 <!--<![endif]-->
 <head>
 	<meta charset="utf-8">
-	<title>Заголовок</title>
+	<title>Работа Халтура в СПб</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 	<meta name="format-detection" content="telephone=no">
 	<link rel="stylesheet" href="{% static 'main/css/fonts.css' %}">
 	<link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
-	<script src="{% static 'main/libs/jquery/jquery-3.6.0.min.js' %}"></script>
 </head>
-<body class="theme-dark">
-	<div class="scale-wrapper">
+<body>
+	<script src="{% static 'main/libs/jquery/jquery-3.6.0.min.js' %}"></script>
+	<script src="{% static 'main/js/common.js' %}"></script>
+	<div class="scale-wrapper" style="background-color: white;">
 		<div class="layout">
 			<div class="wrapper">
 				<header class="header"> 
 					<div class="header__wrapper"> 
-						<a class="logo">
-							<img src="{% static 'main/img/logo.jpg' %}" alt="alt">
-							<img src="{% static 'main/img/logo2.jpg' %}" alt="alt">
+						<a href="/" class="logo">
+							<img src="{% static 'main/img/logo.jpg' %}">
+							<img src="{% static 'main/img/logo2.jpg' %}">
 						</a>
 
 						<div class="theme-change">
-							<div id="sun">
+							<div id="sun" style="display: none;">
 								<?xml version="1.0" standalone="no"?>
 								<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
 								"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
@@ -70,7 +71,7 @@
 								</svg>
 							</div>
 
-							<div id="moon" style="display: none;">
+							<div id="moon">
 								<?xml version="1.0" standalone="no"?>
 							<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
 							"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
@@ -107,11 +108,14 @@
 						<h1 class="billbord__title">{{ settings.title }}</h1>
 						<h2 class="billbord__descr">Работа, халтура, объекты</h2>
 						<button class="btn-main open-modal">Присоединиться</button>
-						{% if settings.enable_running_line %}
-							<div class="header__title">
-								<div class="marquee"><span>{{ settings.running_line }}</span></div>
+					
+						<div class="header__title">
+							<div {% if settings.enable_running_line %}class="marquee"{% endif %}>
+								<span>{{ settings.running_line }} </span>
+								<span>{{ settings.running_line }} </span>
+								<span>{{ settings.running_line }} </span>
 							</div>
-						{% endif %}
+						</div>
 					</div>
 				</section>
 			</div>
@@ -134,17 +138,9 @@
 							<div class="title-share">{% if client.username %}{{ client.username }}, {% endif %}Вы уже отвечали на вопросы.
 							Хотите переписать введённые данные?</div>
 							<div style="display: flex; gap: 10px; justify-content: center;">
-								<button class="btn-page" onclick="submitRepeat(event)">Да</button>
-								<button class="btn-page" onclick="closeModal(event)">Нет</button>
+								<button style="width: 70px;" class="btn-page" onclick="submitRepeat()">Да</button>
+								<button style="width: 70px;" class="btn-page" onclick="closeModal(event)">Нет</button>
 							</div>
-
-							<script>
-								function submitRepeat(event){
-									document.getElementById("modalrepeat").classList.remove("zoom-in")
-									document.getElementById("modalrepeat").classList.remove("active")
-									openInteres(event)
-								}
-							</script>
 						</div>
 					</div>
 				</div>
@@ -242,7 +238,7 @@
 							</div>
 							<div class="title-share"><span>Имя</span>, поделитесь этой ссылкой с коллегами!</div>
 							<div class="share-unit">
-								<div class="share-unit__value">https://old.wordstat.yandex.ru/#!/?reg</div>
+								<div class="share-unit__value">{{ settings.window_w }}</div>
 								<div class="share-unit__btn">
 									<img src="{% static 'main/img/chain.svg' %}" alt="alt">
 								</div>
@@ -287,10 +283,7 @@
 		<a href="{{ settings.privacy_link }}" class="link-page">Политика конфиденциальности</a>
 	</footer>
 
-	<script src="{% static 'main/libs/jquery/jquery-3.6.0.min.js' %}"></script>
 	<script src="{% static 'main/libs/mask/jquery.maskedinput.js' %}"></script>
-	<script src="{% static 'main/js/sendAnswer.js' %}"></script>
-	<script src="{% static 'main/js/common.js' %}"></script>
 	{% if messanger == "tg" %}
 		<script src="https://telegram.org/js/telegram-web-app.js"></script>
 		<script>
@@ -308,11 +301,22 @@
 				console.log('Тема пользователя не определена');
 			}
 		</script>
-	{% else %}
-		<script>
-			const theme = "{{ theme }}";
-			console.log(theme)
-		</script>
+	{% elif messanger == "vk" %}
+	<script>
+		client = window.location.hash.slice(1)
+		console.log(client)
+	</script>
+	<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+  <script>
+    vkBridge.send('VKWebAppInit', {})
+    .then(() => {
+        vkBridge.send('VKWebAppGetUserInfo', {})
+            .then(data => {
+                console.log(data)
+            })
+            .catch(error => console.error("VKWebAppGetUserInfo error:", error));
+    });
+  </script>
 	{% endif %}
 </body>
 </html>

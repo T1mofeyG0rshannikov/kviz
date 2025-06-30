@@ -37,7 +37,6 @@ class KvizAdmin(admin.ModelAdmin):
         "comprehensive_finishing", "another_finisher", "metro"
     ]
 
-
     @admin.display(description="Дата и время")
     def created_at_tag(self, obj):
         return obj.created_at.strftime('%d.%m.%y %H:%M')

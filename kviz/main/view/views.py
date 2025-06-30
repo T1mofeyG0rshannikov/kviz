@@ -11,13 +11,12 @@ class KvizView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         client_id = self.request.GET.get("client")
-        client = Client.objects.get(id=int(client_id))
+        if client_id:
+            context["client"] = Client.objects.get(id=int(client_id))
 
         messanger = self.request.GET.get("messanger")
 
-        context['theme'] = self.request.GET.get("theme")
         context['messanger'] = messanger
-        context["client"] = client
         context["settings"] = IndexPage.objects.first()
 
         context["forms"] = get_forms()
@@ -36,5 +35,10 @@ class Index(TemplateView):
         return context
 
 
-class VKView(TemplateView):
-    template_name = 'main/index_vk.html'
+class VKView(KvizView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["messanger"] = "vk"
+
+        return context

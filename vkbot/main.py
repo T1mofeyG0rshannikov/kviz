@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 import requests
-
+from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 
 load_dotenv()
 
@@ -11,12 +11,31 @@ VK_TOKEN = os.getenv("VK_TOKEN")
 GROUP_ID = os.getenv('GROUP_ID')
 APP_URL = os.getenv('APP_URL')
 SITE_URL = os.getenv('SITE_URL')
-YOUR_VK_APP_ID = os.getenv('YOUR_VK_APP_ID')
+
 
 vk_session = vk_api.VkApi(token=VK_TOKEN)
 vk = vk_session.get_api()
 
 longpoll = VkBotLongPoll(vk_session, GROUP_ID)
+
+
+def get_user_name(user_id, vk):
+    try:
+        users = vk.users.get(user_ids=[user_id])
+
+        if users:
+            user = users[0]
+            first_name = user['first_name']
+            last_name = user['last_name']
+            return f"{first_name} {last_name}"
+        else:
+            return None  # Пользователь не найден
+    except vk_api.exceptions.ApiError as e:
+        print(f"Ошибка API: {e}")
+        return None  # Ошибка API
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
+        return None  # Другая ошибка
 
 
 def download_file(url, filename):
@@ -55,12 +74,16 @@ def main():
     draft_data = {}
 
     for event in longpoll.listen():
-
+        print(event)
         if event.type == VkBotEventType.MESSAGE_NEW:
-            user_id = event.obj.message['from_id']
+            print(event)
+            #print(event.__dict__)
+           # print(event.message)
+            print(event.obj)
+            user_id = event.obj['from_id']
             state = user_states.get(user_id)
-            message = event.obj.message['text']
-            attachments = event.obj.message.get('attachments')
+            message = event.obj['text']
+            attachments = event.obj.get('attachments')
             content_type = 'document' if attachments else 'text'
 
             if attachments:
@@ -70,17 +93,37 @@ def main():
                         doc_url = doc['url']
                         doc_title = doc['title']
 
-                        filename = doc_title
+                        filename = doc_title.replace(" ", "-")
                         draft_data['documents'] = draft_data.get('documents', []) + [filename]
 
                         download_file(doc_url, filename)
 
             print(user_id)
-            if message.lower() == 'старт':
+            if message.lower() == 'начать':
+                print(event.obj)
+                user_name = get_user_name(user_id, vk)
+                print(user_name)
+                response = requests.post(f"{SITE_URL}/client", headers={
+                    "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    data={
+                        "user_id": event.obj['from_id'], 
+                        "messanger_name": user_name, 
+                        "messanger": "vk"
+                    }
+                )
+
+                client = response.json()
+
+                keyboard = VkKeyboard(one_time=False, inline=True)
+                keyboard.add_openlink_button(label='Открыть приложение', link=f"{APP_URL}#{client['client']}")
+                keyboard_json = keyboard.get_keyboard()
+
                 vk.messages.send(
                     user_id=user_id,
-                    message=f"Вот ссылка на приложение: {APP_URL}",
-                    random_id=0
+                    message=f"Нажмите кнопку, чтобы открыть приложение:",
+                    random_id=0,
+                    keyboard=keyboard_json
                 )
 
             elif message.lower() == "рассылка":

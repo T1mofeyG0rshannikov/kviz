@@ -65,12 +65,14 @@ class ClientView(View):
         data = request.POST
         print(data)
 
-        client = Client.objects.create(
-            user_id=data["user_id"],
-            messanger=data["messanger"],
-            messanger_name=data.get("messanger_name"),
-            nickname=data.get("nickname")
-        )
+        client =  Client.objects.filter(user_id=data["user_id"], messanger=data["messanger"]).first()
+        if client is None:
+            client = Client.objects.create(
+                user_id=data["user_id"],
+                messanger=data["messanger"],
+                messanger_name=data.get("messanger_name"),
+                nickname=data.get("nickname")
+            )
 
         return JsonResponse({"client": client.id})
 
@@ -78,7 +80,14 @@ class ClientView(View):
         data = request.POST
         print(data)
 
-        client =  get_object_or_404(Client, user_id=data["user_id"], messanger=data["messanger"])
+        client =  Client.objects.filter(user_id=data["user_id"], messanger=data["messanger"]).first()
+        if client is None:
+            client = Client.objects.create(
+                user_id=data["user_id"],
+                messanger=data["messanger"],
+                messanger_name=data.get("messanger_name"),
+                nickname=data.get("nickname")
+            )
 
         return JsonResponse({"client": client.id})
 

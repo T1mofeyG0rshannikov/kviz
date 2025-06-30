@@ -1,0 +1,7 @@
+django
+gunicorn
+telebot
+vk_api
+python-dotenv
+requests
+openpyxl==.1.5

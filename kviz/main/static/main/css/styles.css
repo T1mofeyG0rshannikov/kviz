@@ -158,11 +158,10 @@ body {
 	padding: 3px 15px;
 	padding-left: 12px;
 	max-width: 1000px;
-	gap: 15px;
+	gap: 20px;
 	margin: 0 auto;
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
 }
 .logo img {
 	width: 88px;
@@ -315,7 +314,7 @@ body {
 	background: #000;
 	opacity: 0;
 	visibility: hidden;
-	z-index: 100;
+	z-index: 1;
 	transition: all 0.3s;
 }
 .modal {
